@@ -548,7 +548,7 @@ export default function Home() {
       isDark ? 'bg-[#050711] text-slate-100' : 'bg-slate-50 text-slate-900'
     }`}>
       
-      {/* CSS KEYFRAMES UNTUK SMOTH HARDWARE-ACCELERATED MARQUEE */}
+      {/* CSS KEYFRAMES UNTUK SMOOTH MARQUEE */}
       <style jsx global>{`
         @keyframes smoothMarquee {
           0% { transform: translate3d(0, 0, 0); }
@@ -765,7 +765,7 @@ export default function Home() {
 
       </section>
 
-      {/* --- RUNNING PARTNER MARQUEE BANNER (CSS ULTRA SMOOTH / NO LAG) --- */}
+      {/* --- RUNNING PARTNER MARQUEE BANNER --- */}
       <div className={`border-y py-6 mb-20 overflow-hidden relative backdrop-blur-md ${
         isDark ? 'border-slate-800/80 bg-slate-950/60' : 'border-slate-200 bg-white/80'
       }`}>
@@ -784,7 +784,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 3. PAKET HARGA & NETWORK SELECTOR */}
+      {/* 3. PAKET HARGA & NETWORK SELECTOR (RESPONSIF TERHUBUNG & TRANSISI SMOOTH) */}
       <section id="pricing" className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-16 border-t ${isDark ? 'border-slate-800/60' : 'border-slate-200'}`}>
         <div className="text-center max-w-2xl mx-auto mb-10">
           <h2 className={`text-3xl sm:text-4xl font-black mb-6 ${isDark ? 'text-white' : 'text-slate-900'}`}>Buat Token Baru</h2>
@@ -797,7 +797,7 @@ export default function Home() {
                 key={net}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setCurrency(net)}
-                className={`px-5 sm:px-6 py-2 rounded-full text-xs font-black tracking-wider transition-all ${
+                className={`px-4 sm:px-6 py-2 rounded-full text-xs font-black tracking-wider transition-all ${
                   currency === net 
                     ? (isDark ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg shadow-sky-600/30')
                     : (isDark ? 'bg-slate-900 text-slate-400 hover:text-white' : 'bg-slate-100 text-slate-600 hover:text-slate-900')
@@ -809,127 +809,187 @@ export default function Home() {
           </div>
         </div>
 
-        <AnimatePresence mode="wait">
+        {/* Grid Responsif: 1 Kolom di HP / Mobile, 3 Kolom di Desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+          
+          {/* Paket Dasar */}
           <motion.div 
-            key={currency}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="grid md:grid-cols-3 gap-6 items-stretch"
+            whileHover={{ y: -6 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all shadow-xl h-full border ${
+              isDark ? 'bg-[#080821] border-indigo-900/50 hover:border-indigo-500 shadow-indigo-950/40' : 'bg-white border-slate-200 hover:border-sky-500 shadow-slate-200'
+            }`}
           >
-            {/* Paket Dasar */}
-            <motion.div 
-              whileHover={{ y: -10, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all shadow-xl h-full border ${
-                isDark ? 'bg-[#080821] border-indigo-900/50 hover:border-indigo-500 shadow-indigo-950/40' : 'bg-white border-slate-200 hover:border-sky-500 shadow-slate-200'
-              }`}
-            >
-              <div>
-                <div className="text-center mb-6">
-                  <h3 className={`text-xl font-extrabold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Paket Dasar</h3>
-                  <p className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Fitur penting untuk membuat token dasar.</p>
-                  <p className={`text-2xl sm:text-3xl font-black mt-6 mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>{currentPricing.dasar.price}</p>
-                  <p className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>/proyek</p>
-                </div>
+            <div>
+              <div className="text-center mb-6">
+                <h3 className={`text-xl font-extrabold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Paket Dasar</h3>
+                <p className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Fitur penting untuk membuat token dasar.</p>
+                
+                <AnimatePresence mode="wait">
+                  <motion.p 
+                    key={currency + "-dasar"}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2 }}
+                    className={`text-xl sm:text-2xl lg:text-3xl font-black mt-6 mb-1 break-words ${isDark ? 'text-white' : 'text-slate-900'}`}
+                  >
+                    {currentPricing.dasar.price}
+                  </motion.p>
+                </AnimatePresence>
+                
+                <p className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>/proyek</p>
+              </div>
 
-                <ul className={`space-y-3.5 text-xs pt-6 border-t mb-8 ${isDark ? 'text-slate-200 border-slate-800/80' : 'text-slate-700 border-slate-100'}`}>
+              <AnimatePresence mode="wait">
+                <motion.ul 
+                  key={currency + "-dasar-list"}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={`space-y-3.5 text-xs pt-6 border-t mb-8 ${isDark ? 'text-slate-200 border-slate-800/80' : 'text-slate-700 border-slate-100'}`}
+                >
                   {currentPricing.dasar.features.map((feat, idx) => (
                     <li key={idx} className="flex items-start gap-2.5">
                       <CheckCircle2 size={16} className={`shrink-0 mt-0.5 ${isDark ? 'text-indigo-400' : 'text-sky-600'}`} />
                       <span className="leading-relaxed">{feat}</span>
                     </li>
                   ))}
-                </ul>
-              </div>
+                </motion.ul>
+              </AnimatePresence>
+            </div>
 
-              <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full font-extrabold text-xs py-3.5 rounded-2xl transition-all shadow-md mt-auto ${
-                  isDark ? 'bg-[#38bdf8] hover:bg-[#0284c7] text-slate-950' : 'bg-sky-600 hover:bg-sky-700 text-white'
-                }`}
-              >
-                Beli Paket
-              </motion.button>
-            </motion.div>
-
-            {/* Paket Standar */}
-            <motion.div 
-              whileHover={{ y: -10, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all shadow-xl h-full border ${
-                isDark ? 'bg-[#080821] border-indigo-900/50 hover:border-indigo-500 shadow-indigo-950/40' : 'bg-white border-slate-200 hover:border-sky-500 shadow-slate-200'
+            <motion.button 
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`w-full font-extrabold text-xs py-3.5 rounded-2xl transition-all shadow-md mt-auto ${
+                isDark ? 'bg-[#38bdf8] hover:bg-[#0284c7] text-slate-950' : 'bg-sky-600 hover:bg-sky-700 text-white'
               }`}
             >
-              <div>
-                <div className="text-center mb-6">
-                  <h3 className={`text-xl font-extrabold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Paket Standar</h3>
-                  <p className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Fitur penting untuk membuat token standar.</p>
-                  <p className={`text-2xl sm:text-3xl font-black mt-6 mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>{currentPricing.standar.price}</p>
-                  <p className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>/proyek</p>
-                </div>
+              Beli Paket
+            </motion.button>
+          </motion.div>
 
-                <ul className={`space-y-3.5 text-xs pt-6 border-t mb-8 ${isDark ? 'text-slate-200 border-slate-800/80' : 'text-slate-700 border-slate-100'}`}>
+          {/* Paket Standar */}
+          <motion.div 
+            whileHover={{ y: -6 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all shadow-xl h-full border ${
+              isDark ? 'bg-[#080821] border-indigo-900/50 hover:border-indigo-500 shadow-indigo-950/40' : 'bg-white border-slate-200 hover:border-sky-500 shadow-slate-200'
+            }`}
+          >
+            <div>
+              <div className="text-center mb-6">
+                <h3 className={`text-xl font-extrabold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Paket Standar</h3>
+                <p className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Fitur penting untuk membuat token standar.</p>
+                
+                <AnimatePresence mode="wait">
+                  <motion.p 
+                    key={currency + "-standar"}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2 }}
+                    className={`text-xl sm:text-2xl lg:text-3xl font-black mt-6 mb-1 break-words ${isDark ? 'text-white' : 'text-slate-900'}`}
+                  >
+                    {currentPricing.standar.price}
+                  </motion.p>
+                </AnimatePresence>
+
+                <p className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>/proyek</p>
+              </div>
+
+              <AnimatePresence mode="wait">
+                <motion.ul 
+                  key={currency + "-standar-list"}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={`space-y-3.5 text-xs pt-6 border-t mb-8 ${isDark ? 'text-slate-200 border-slate-800/80' : 'text-slate-700 border-slate-100'}`}
+                >
                   {currentPricing.standar.features.map((feat, idx) => (
                     <li key={idx} className="flex items-start gap-2.5">
                       <CheckCircle2 size={16} className={`shrink-0 mt-0.5 ${isDark ? 'text-indigo-400' : 'text-sky-600'}`} />
                       <span className="leading-relaxed">{feat}</span>
                     </li>
                   ))}
-                </ul>
-              </div>
+                </motion.ul>
+              </AnimatePresence>
+            </div>
 
-              <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full font-extrabold text-xs py-3.5 rounded-2xl transition-all shadow-md mt-auto ${
-                  isDark ? 'bg-[#38bdf8] hover:bg-[#0284c7] text-slate-950' : 'bg-sky-600 hover:bg-sky-700 text-white'
-                }`}
-              >
-                Beli Paket
-              </motion.button>
-            </motion.div>
-
-            {/* Paket Lanjutan */}
-            <motion.div 
-              whileHover={{ y: -10, scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all shadow-xl h-full border ${
-                isDark ? 'bg-[#080821] border-indigo-900/50 hover:border-indigo-500 shadow-indigo-950/40' : 'bg-white border-slate-200 hover:border-sky-500 shadow-slate-200'
+            <motion.button 
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`w-full font-extrabold text-xs py-3.5 rounded-2xl transition-all shadow-md mt-auto ${
+                isDark ? 'bg-[#38bdf8] hover:bg-[#0284c7] text-slate-950' : 'bg-sky-600 hover:bg-sky-700 text-white'
               }`}
             >
-              <div>
-                <div className="text-center mb-6">
-                  <h3 className={`text-xl font-extrabold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Paket Lanjutan</h3>
-                  <p className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Fitur penting untuk membuat token canggih.</p>
-                  <p className={`text-2xl sm:text-3xl font-black mt-6 mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>{currentPricing.lanjutan.price}</p>
-                  <p className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>/proyek</p>
-                </div>
+              Beli Paket
+            </motion.button>
+          </motion.div>
 
-                <ul className={`space-y-3.5 text-xs pt-6 border-t mb-8 ${isDark ? 'text-slate-200 border-slate-800/80' : 'text-slate-700 border-slate-100'}`}>
+          {/* Paket Lanjutan */}
+          <motion.div 
+            whileHover={{ y: -6 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all shadow-xl h-full border ${
+              isDark ? 'bg-[#080821] border-indigo-900/50 hover:border-indigo-500 shadow-indigo-950/40' : 'bg-white border-slate-200 hover:border-sky-500 shadow-slate-200'
+            }`}
+          >
+            <div>
+              <div className="text-center mb-6">
+                <h3 className={`text-xl font-extrabold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Paket Lanjutan</h3>
+                <p className={`text-xs font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>Fitur penting untuk membuat token canggih.</p>
+                
+                <AnimatePresence mode="wait">
+                  <motion.p 
+                    key={currency + "-lanjutan"}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2 }}
+                    className={`text-xl sm:text-2xl lg:text-3xl font-black mt-6 mb-1 break-words ${isDark ? 'text-white' : 'text-slate-900'}`}
+                  >
+                    {currentPricing.lanjutan.price}
+                  </motion.p>
+                </AnimatePresence>
+
+                <p className={`text-xs font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>/proyek</p>
+              </div>
+
+              <AnimatePresence mode="wait">
+                <motion.ul 
+                  key={currency + "-lanjutan-list"}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={`space-y-3.5 text-xs pt-6 border-t mb-8 ${isDark ? 'text-slate-200 border-slate-800/80' : 'text-slate-700 border-slate-100'}`}
+                >
                   {currentPricing.lanjutan.features.map((feat, idx) => (
                     <li key={idx} className="flex items-start gap-2.5">
                       <CheckCircle2 size={16} className={`shrink-0 mt-0.5 ${isDark ? 'text-indigo-400' : 'text-sky-600'}`} />
                       <span className="leading-relaxed">{feat}</span>
                     </li>
                   ))}
-                </ul>
-              </div>
+                </motion.ul>
+              </AnimatePresence>
+            </div>
 
-              <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full font-extrabold text-xs py-3.5 rounded-2xl transition-all shadow-md mt-auto ${
-                  isDark ? 'bg-[#38bdf8] hover:bg-[#0284c7] text-slate-950' : 'bg-sky-600 hover:bg-sky-700 text-white'
-                }`}
-              >
-                Beli Paket
-              </motion.button>
-            </motion.div>
+            <motion.button 
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`w-full font-extrabold text-xs py-3.5 rounded-2xl transition-all shadow-md mt-auto ${
+                isDark ? 'bg-[#38bdf8] hover:bg-[#0284c7] text-slate-950' : 'bg-sky-600 hover:bg-sky-700 text-white'
+              }`}
+            >
+              Beli Paket
+            </motion.button>
           </motion.div>
-        </AnimatePresence>
+
+        </div>
       </section>
 
       {/* 4. TENTANG KAMI */}
