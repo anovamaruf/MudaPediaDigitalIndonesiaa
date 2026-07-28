@@ -1015,7 +1015,7 @@ export default function Home() {
                 <Sparkles size={18} /> Misi Kami
               </h3>
               <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                Memahami bahwa era digital telah membuka pintu menuju peluang tak terbatas. Kami hadir sebagai solusi cerdas dan terpercaya untuk membantu Anda berkembang dalam dunia yang terus berubah.
+                Memahami bahwa era digital telah membuka pintu menuju peluang tak terbatas. Kami hadir sebagai solusi cerdas dan terpercaya untuk membantu Anda berkembang dalam dunia yang terus berubah. Sebagai perusahaan inovatif, kami menawarkan rangkaian layanan yang dirancang khusus untuk memenuhi kebutuhan bisnis modern.
               </p>
             </div>
           </div>
