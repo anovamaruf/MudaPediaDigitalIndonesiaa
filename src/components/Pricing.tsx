@@ -285,7 +285,6 @@ export default function Pricing({ isDark }: { isDark: boolean }) {
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-        {/* Paket Dasar */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -356,7 +355,6 @@ export default function Pricing({ isDark }: { isDark: boolean }) {
           </motion.button>
         </motion.div>
 
-        {/* Paket Standar */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -427,7 +425,6 @@ export default function Pricing({ isDark }: { isDark: boolean }) {
           </motion.button>
         </motion.div>
 
-        {/* Paket Lanjutan */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

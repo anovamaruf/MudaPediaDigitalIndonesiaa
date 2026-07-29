@@ -100,7 +100,6 @@ export default function About({ isDark }: { isDark: boolean }) {
         </div>
       </motion.div>
 
-      {/* Komponen Statistik Angka Beranimasi */}
       <StatsCounter isDark={isDark} />
     </section>
   );

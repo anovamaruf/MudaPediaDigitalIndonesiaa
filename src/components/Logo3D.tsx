@@ -8,9 +8,7 @@ import * as THREE from 'three';
 function LogoShape() {
   const meshRef = useRef<THREE.Mesh>(null!);
 
-  // Membuat bentuk pita geometris logo "M"
   const shape = new THREE.Shape();
-  // Bentuk pita logo Mudapedia
   shape.moveTo(-1.8, -1.2);
   shape.lineTo(-1.2, 1.2);
   shape.lineTo(-0.2, -0.4);
@@ -22,7 +20,7 @@ function LogoShape() {
 
   const extrudeSettings = {
     steps: 2,
-    depth: 0.4, // Ketebalan 3D
+    depth: 0.4, 
     bevelEnabled: true,
     bevelThickness: 0.1,
     bevelSize: 0.1,
@@ -31,7 +29,6 @@ function LogoShape() {
 
   useFrame((state) => {
     if (meshRef.current) {
-      // Rotasi halus bergoyang secara otomatis
       meshRef.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.8) * 0.3;
       meshRef.current.rotation.x = Math.cos(state.clock.getElapsedTime() * 0.5) * 0.15;
     }
@@ -41,7 +38,6 @@ function LogoShape() {
     <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
       <mesh ref={meshRef} position={[0, 0, 0]}>
         <extrudeGeometry args={[shape, extrudeSettings]} />
-        {/* Material Gradient Cyan ke Purple Metallic */}
         <meshStandardMaterial
           color="#6366f1"
           roughness={0.2}

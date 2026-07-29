@@ -41,7 +41,6 @@ export default function Home() {
     }`}>
       
 
-      {/* CSS KEYFRAMES UNTUK SMOOTH MARQUEE */}
       <style jsx global>{`
         @keyframes smoothMarquee {
           0% { transform: translate3d(0, 0, 0); }
@@ -55,7 +54,6 @@ export default function Home() {
         }
       `}</style>
       
-      {/* --- FULLSCREEN CLEAN TRANSPARENT LOADING --- */}
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -80,7 +78,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Background Ambient Blur */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className={`absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full blur-[140px] ${isDark ? 'bg-indigo-600/20' : 'bg-sky-400/15'}`} />
         <div className={`absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full blur-[140px] ${isDark ? 'bg-purple-600/15' : 'bg-indigo-400/10'}`} />

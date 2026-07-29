@@ -123,13 +123,10 @@ export default function Team({ isDark }: { isDark: boolean }) {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [direction, setDirection] = useState<number>(1);
 
-  // Fungsi untuk menangani klik pada tab navigasi agar arah animasi (kiri/kanan) otomatis dinamis
   const handleTabChange = (newTab: TabType) => {
     const currentIndex = tabsList.indexOf(activeTab);
     const newIndex = tabsList.indexOf(newTab);
 
-    // Jika geser ke kanan (index bertambah) -> dir = 1 (Slide Kanan ke Kiri)
-    // Jika geser ke kiri (index berkurang) -> dir = -1 (Slide Kiri ke Kanan)
     if (newIndex > currentIndex) {
       setDirection(1);
     } else if (newIndex < currentIndex) {
@@ -161,7 +158,6 @@ export default function Team({ isDark }: { isDark: boolean }) {
     setCurrentSlide((prev) => (prev - 1 + totalPages) % (totalPages || 1));
   };
 
-  // Variasi animasi geser 2 arah dinamis
   const slideVariants = {
     enter: (dir: number) => ({
       x: dir > 0 ? 200 : -200,
@@ -278,7 +274,6 @@ export default function Team({ isDark }: { isDark: boolean }) {
         )}
       </motion.div>
 
-      {/* MODAL PORTOFOLIO TIM / MAGANG */}
       <AnimatePresence>
         {selectedIntern && (
           <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
