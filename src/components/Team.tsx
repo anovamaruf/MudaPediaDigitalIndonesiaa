@@ -54,6 +54,7 @@ function ModernTeamCard({ member, onSelect, isDark }: { member: Intern; onSelect
           <img
             src={member.avatar}
             alt={member.name}
+            loading="lazy"
             className={`relative w-full h-full rounded-full object-cover border-2 transition-all duration-300 shadow-xl ${
               isDark ? 'border-indigo-500/40 group-hover:border-indigo-400' : 'border-sky-400/50 group-hover:border-sky-500'
             } group-hover:scale-105`}
@@ -114,14 +115,36 @@ function ModernTeamCard({ member, onSelect, isDark }: { member: Intern; onSelect
 }
 
 export default function Team({ isDark }: { isDark: boolean }) {
-  const [activeTab, setActiveTab] = useState<'all' | 'tim' | 'magang' | 'alumni'>('all');
+  const tabsList = ['all', 'tim', 'magang', 'alumni'] as const;
+  type TabType = typeof tabsList[number];
+
+  const [activeTab, setActiveTab] = useState<TabType>('all');
   const [selectedIntern, setSelectedIntern] = useState<Intern | null>(null);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [direction, setDirection] = useState<number>(1);
+
+  // Fungsi untuk menangani klik pada tab navigasi agar arah animasi (kiri/kanan) otomatis dinamis
+  const handleTabChange = (newTab: TabType) => {
+    const currentIndex = tabsList.indexOf(activeTab);
+    const newIndex = tabsList.indexOf(newTab);
+
+    // Jika geser ke kanan (index bertambah) -> dir = 1 (Slide Kanan ke Kiri)
+    // Jika geser ke kiri (index berkurang) -> dir = -1 (Slide Kiri ke Kanan)
+    if (newIndex > currentIndex) {
+      setDirection(1);
+    } else if (newIndex < currentIndex) {
+      setDirection(-1);
+    }
+
+    setActiveTab(newTab);
+    setCurrentSlide(0);
+  };
 
   const filteredTeam = internsData.filter((member) => {
-    if (activeTab === 'tim') return member.isActive;
-    if (activeTab === 'magang') return !member.isActive && !member.isAlumni;
-    if (activeTab === 'alumni') return member.isAlumni;
+    const isIntern = member.role.toLowerCase().includes('intern');
+    if (activeTab === 'tim') return !member.isAlumni && !isIntern;
+    if (activeTab === 'magang') return !member.isAlumni && isIntern;
+    if (activeTab === 'alumni') return member.isAlumni === true;
     return true;
   });
 
@@ -129,91 +152,131 @@ export default function Team({ isDark }: { isDark: boolean }) {
   const totalPages = Math.ceil(filteredTeam.length / itemsPerPage);
 
   const nextSlide = () => {
+    setDirection(1);
     setCurrentSlide((prev) => (prev + 1) % (totalPages || 1));
   };
 
   const prevSlide = () => {
+    setDirection(-1);
     setCurrentSlide((prev) => (prev - 1 + totalPages) % (totalPages || 1));
+  };
+
+  // Variasi animasi geser 2 arah dinamis
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 200 : -200,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (dir: number) => ({
+      x: dir < 0 ? 200 : -200,
+      opacity: 0,
+    }),
   };
 
   return (
     <section id="team" className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-20 border-t ${isDark ? 'border-slate-800/60' : 'border-slate-200'}`}>
-      <div className="text-center max-w-2xl mx-auto mb-10">
-        <h2 className={`text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-indigo-400' : 'text-sky-600'}`}>Tim Kami</h2>
-        <p className={`text-3xl sm:text-4xl font-black mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>Meet Our Team</p>
-        <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-          Bersatu dalam visi, beragam dalam karya. Tim Mudapedia hadir untuk menghadirkan pengetahuan, kreativitas, dan solusi digital bagi generasi muda Indonesia.
-        </p>
-      </div>
-
-      <div className="flex justify-center mb-12">
-        <div className={`inline-flex p-1.5 rounded-full border shadow-xl flex-wrap justify-center gap-1 ${isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-white border-slate-200 shadow-slate-200'}`}>
-          {(['all', 'tim', 'magang', 'alumni'] as const).map((tab) => (
-            <motion.button
-              key={tab}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                setActiveTab(tab);
-                setCurrentSlide(0);
-              }}
-              className={`px-5 sm:px-6 py-2 rounded-full text-xs font-bold transition-all capitalize ${
-                activeTab === tab 
-                  ? (isDark ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg shadow-sky-600/30')
-                  : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900')
-              }`}
-            >
-              {tab === 'all' ? 'Semua' : tab === 'tim' ? 'Tim' : tab === 'magang' ? 'Magang' : 'Alumni'}
-            </motion.button>
-          ))}
+      
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "100px" }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <h2 className={`text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-indigo-400' : 'text-sky-600'}`}>Tim Kami</h2>
+          <p className={`text-3xl sm:text-4xl font-black mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>Meet Our Team</p>
+          <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+            Bersatu dalam visi, beragam dalam karya. Tim Mudapedia hadir untuk menghadirkan pengetahuan, kreativitas, dan solusi digital bagi generasi muda Indonesia.
+          </p>
         </div>
-      </div>
 
-      <div className="relative group">
-        <div className="flex flex-wrap justify-center gap-6 items-stretch">
-          {filteredTeam
-            .slice(currentSlide * itemsPerPage, (currentSlide + 1) * itemsPerPage)
-            .map((member) => (
-              <ModernTeamCard key={member.id} member={member} onSelect={(m) => setSelectedIntern(m)} isDark={isDark} />
+        <div className="flex justify-center mb-12">
+          <div className={`inline-flex p-1.5 rounded-full border shadow-xl flex-wrap justify-center gap-1 ${isDark ? 'bg-slate-950/80 border-slate-800' : 'bg-white border-slate-200 shadow-slate-200'}`}>
+            {tabsList.map((tab) => (
+              <motion.button
+                key={tab}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleTabChange(tab)}
+                className={`px-5 sm:px-6 py-2 rounded-full text-xs font-bold transition-all capitalize ${
+                  activeTab === tab 
+                    ? (isDark ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30' : 'bg-gradient-to-r from-sky-600 to-indigo-600 text-white shadow-lg shadow-sky-600/30')
+                    : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900')
+                }`}
+              >
+                {tab === 'all' ? 'Semua' : tab === 'tim' ? 'Tim' : tab === 'magang' ? 'Magang' : 'Alumni'}
+              </motion.button>
             ))}
+          </div>
+        </div>
+
+        <div className="relative group px-2 py-4">
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <motion.div
+              key={currentSlide + activeTab}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 350, damping: 30 },
+                opacity: { duration: 0.18 },
+              }}
+              className="flex flex-wrap justify-center gap-6 items-stretch"
+            >
+              {filteredTeam
+                .slice(currentSlide * itemsPerPage, (currentSlide + 1) * itemsPerPage)
+                .map((member) => (
+                  <ModernTeamCard key={member.id} member={member} onSelect={(m) => setSelectedIntern(m)} isDark={isDark} />
+                ))}
+            </motion.div>
+          </AnimatePresence>
+
+          {totalPages > 1 && (
+            <>
+              <button
+                onClick={prevSlide}
+                className={`absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-20 ${
+                  isDark ? 'bg-slate-900/90 border-slate-700 hover:bg-indigo-600' : 'bg-sky-600 border-sky-500 hover:bg-sky-700'
+                }`}
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                onClick={nextSlide}
+                className={`absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-20 ${
+                  isDark ? 'bg-slate-900/90 border-slate-700 hover:bg-indigo-600' : 'bg-sky-600 border-sky-500 hover:bg-sky-700'
+                }`}
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>
+          )}
         </div>
 
         {totalPages > 1 && (
-          <>
-            <button
-              onClick={prevSlide}
-              className={`absolute -left-2 sm:-left-5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full border text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-20 ${
-                isDark ? 'bg-slate-900/80 border-slate-700 hover:bg-indigo-600' : 'bg-sky-600 border-sky-500 hover:bg-sky-700'
-              }`}
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={nextSlide}
-              className={`absolute -right-2 sm:-right-5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full border text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-20 ${
-                isDark ? 'bg-slate-900/80 border-slate-700 hover:bg-indigo-600' : 'bg-sky-600 border-sky-500 hover:bg-sky-700'
-              }`}
-            >
-              <ChevronRight size={18} />
-            </button>
-          </>
+          <div className="flex justify-center items-center gap-2 mt-8">
+            {Array.from({ length: totalPages }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  setDirection(idx > currentSlide ? 1 : -1);
+                  setCurrentSlide(idx);
+                }}
+                className={`transition-all duration-300 ${
+                  currentSlide === idx
+                    ? (isDark ? 'w-6 h-2.5 bg-indigo-500 rounded-full shadow-md shadow-indigo-500/50' : 'w-6 h-2.5 bg-sky-600 rounded-full shadow-md shadow-sky-600/50')
+                    : (isDark ? 'w-2.5 h-2.5 bg-slate-800 rounded-full hover:bg-slate-600' : 'w-2.5 h-2.5 bg-slate-300 rounded-full hover:bg-slate-400')
+                }`}
+              />
+            ))}
+          </div>
         )}
-      </div>
-
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-8">
-          {Array.from({ length: totalPages }).map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentSlide(idx)}
-              className={`transition-all duration-300 ${
-                currentSlide === idx
-                  ? (isDark ? 'w-6 h-2.5 bg-indigo-500 rounded-full shadow-md shadow-indigo-500/50' : 'w-6 h-2.5 bg-sky-600 rounded-full shadow-md shadow-sky-600/50')
-                  : (isDark ? 'w-2.5 h-2.5 bg-slate-800 rounded-full hover:bg-slate-600' : 'w-2.5 h-2.5 bg-slate-300 rounded-full hover:bg-slate-400')
-              }`}
-            />
-          ))}
-        </div>
-      )}
+      </motion.div>
 
       {/* MODAL PORTOFOLIO TIM / MAGANG */}
       <AnimatePresence>

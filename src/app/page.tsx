@@ -11,7 +11,6 @@ import About from '@/components/About';
 import Team from '@/components/Team';
 import Gallery from '@/components/Gallery';
 import Footer from '@/components/Footer';
-import CustomCursor from '@/components/CustomCursor';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -41,8 +40,6 @@ export default function Home() {
       isDark ? 'bg-[#050711] text-slate-100' : 'bg-slate-50 text-slate-900'
     }`}>
       
-      {/* Custom Cursor untuk perangkat Desktop */}
-      <CustomCursor isDark={isDark} />
 
       {/* CSS KEYFRAMES UNTUK SMOOTH MARQUEE */}
       <style jsx global>{`
