@@ -10,12 +10,6 @@ export default function Navbar() {
         <img src="/mudapedia-logo.webp" alt="Logo Mudapedia" className="w-8 h-8 object-contain" />
         <span className="text-white font-bold text-xs sm:text-sm tracking-wider uppercase">Mudapedia Digital Indonesia</span>
       </div>
-      <div className="hidden md:flex items-center gap-8 text-xs text-slate-400 font-bold">
-        <span className="hover:text-emerald-400 cursor-pointer transition-colors">TIM KAMI</span>
-        <span className="hover:text-emerald-400 cursor-pointer transition-colors">GALERI</span>
-        <span className="hover:text-emerald-400 cursor-pointer transition-colors">HARGA</span>
-        <span className="hover:text-emerald-400 cursor-pointer transition-colors">TENTANG KAMI</span>
-      </div>
       <button className="px-5 py-2 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold hover:opacity-95 transition-opacity">
         Konsultasi
       </button>

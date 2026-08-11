@@ -1,15 +1,14 @@
 'use client';
 
-import React, { Suspense, useMemo, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { Suspense, useMemo, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float } from '@react-three/drei';
 import * as THREE from 'three';
 
-// KOMPONEN 3D: PURE BITCOIN BERSIH SESUAI PERMINTAAN
+// KOMPONEN 3D: PURE BITCOIN BERSIH
 function CleanBitcoin3D() {
   const coinTexture = useMemo(() => new THREE.TextureLoader().load('/bitcoin.png'), []);
-
   const coinRef = useRef<THREE.Group>(null);
   const animRef = useRef({ scale: 0 });
 
@@ -46,6 +45,9 @@ function CleanBitcoin3D() {
 }
 
 export default function TopSection() {
+  // State untuk sistem klik FAQ yang aman di HP maupun Desktop
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   const subtitleText = "Kecepatan dalam Industri Web3, Blockchain, dan Kripto. Kami adalah perusahaan rintisan yang berada di jantung Web3, blockchain, dan kripto, tempat teknologi dan kreativitas berpadu. Tim kami membangun solusi inovatif yang membantu bisnis berkembang di dunia desentralisasi.";
 
   const titleChunks = [
@@ -89,7 +91,7 @@ export default function TopSection() {
   return (
     <div className="relative min-h-screen bg-[#030406] flex flex-col lg:flex-row items-center border-b border-slate-900 overflow-x-hidden pt-16">
       
-      {/* KONTEN KIRI */}
+      {/* KONTEN KIRI (TEKS & FAQ) */}
       <div className="relative z-10 w-full lg:w-3/5 pt-12 pb-12 px-6 sm:px-12 lg:px-24 flex flex-col justify-center">
         <div className="max-w-4xl space-y-8">
           
@@ -119,7 +121,7 @@ export default function TopSection() {
             ))}
           </div>
           
-          {/* SUBJUDUL (Dipecah per kata agar rapi dan tidak terpotong) */}
+          {/* SUBJUDUL */}
           <p className="text-sm sm:text-base text-slate-400 font-mono leading-relaxed max-w-2xl">
             {subtitleText.split(" ").map((word, i) => (
               <motion.span
@@ -135,40 +137,65 @@ export default function TopSection() {
           </p>
         </div>
 
-        {/* EKSPLOR FAQ (ANIMASI HOVER LAYOUT-AWARE DENGAN EFEK MEMBAL SEPERTI VIDEO REFERENSI) */}
+        {/* EKSPLOR FAQ (SISTEM KLIK / TOUCH AGAR BISA DIBUKA DI HP & DESKTOP TANPA MACET) */}
         <div className="mt-14 max-w-2xl space-y-4">
           <h3 className="text-xs font-mono text-white-400 uppercase tracking-widest mb-4">// Eksplor Informasi Cepat:</h3>
-          {faqs.map((faq, i) => (
-            <motion.div
-              key={i}
-              layout
-              initial={{ opacity: 0, y: 80 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                layout: { type: "spring", stiffness: 300, damping: 25 },
-                delay: 2.8 + (i * 0.25),
-                type: "spring",
-                stiffness: 180,
-                damping: 15
-              }}
-              className="group relative border border-slate-800 bg-slate-900/40 backdrop-blur-sm rounded-2xl overflow-hidden max-h-[72px] hover:max-h-[450px] transition-all duration-500 ease-out cursor-pointer hover:border-blue-500 hover:bg-slate-900/60 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)]"
-            >
-              <div className="p-5 flex flex-col justify-start">
-                <div className="flex justify-between items-center h-7">
-                  <span className="font-bold text-white text-base leading-tight pr-4">{faq.q}</span>
-                  <span className="text-slate-500 text-base group-hover:rotate-180 transition-transform duration-300">▼</span>
+          {faqs.map((faq, i) => {
+            const isOpen = activeIndex === i;
+            return (
+              <motion.div
+                key={i}
+                layout
+                initial={{ opacity: 0, y: 80 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  layout: { type: "spring", stiffness: 300, damping: 25 },
+                  delay: 2.8 + (i * 0.25),
+                  type: "spring",
+                  stiffness: 180,
+                  damping: 15
+                }}
+                onClick={() => setActiveIndex(isOpen ? null : i)}
+                className={`group relative border rounded-2xl overflow-hidden backdrop-blur-sm cursor-pointer transition-colors duration-300 ${
+                  isOpen 
+                    ? "border-blue-500 bg-slate-900/60 shadow-[0_0_20px_rgba(59,130,246,0.15)]" 
+                    : "border-slate-800 bg-slate-900/40 hover:border-slate-700"
+                }`}
+              >
+                <div className="p-5 flex flex-col justify-start">
+                  <div className="flex justify-between items-center h-7">
+                    <span className="font-bold text-white text-base leading-tight pr-4">{faq.q}</span>
+                    <motion.span 
+                      animate={{ rotate: isOpen ? 180 : 0 }} 
+                      transition={{ duration: 0.3 }} 
+                      className="text-slate-400 text-base"
+                    >
+                      ▼
+                    </motion.span>
+                  </div>
+                  
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="text-base text-slate-400 mt-4 leading-relaxed overflow-hidden"
+                      >
+                        {faq.a}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <div className="mt-4 text-base text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 pr-8 leading-relaxed">
-                  {faq.a}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
-     {/* KONTEN KANAN - Gunakan sticky agar tetap diam saat konten kiri di-scroll, tanpa ikut scroll ke bawah */}
-      <div className="w-full h-[380px] lg:sticky lg:top-0 lg:w-2/5 lg:h-screen z-0 pointer-events-auto">
+      {/* KONTEN KANAN (BITCOIN 3D - Diberi pointer-events-none di HP agar jari bisa scroll halaman dengan bebas) */}
+      <div className="w-full h-[380px] lg:w-2/5 lg:h-screen relative z-0 pointer-events-none lg:pointer-events-auto">
         <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
           <ambientLight intensity={0.8} />
           <directionalLight position={[10, 10, 5]} intensity={2} color="#ffffff" />

@@ -38,10 +38,10 @@ export default function CoreEngineSection() {
   const handlePointerUp = () => setDragStartY(null);
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-[#030406] font-mono text-white select-none border-b border-slate-900">
+    <section className="relative w-full min-h-screen lg:h-screen overflow-hidden bg-[#030406] font-mono text-white select-none border-b border-slate-900 flex flex-col justify-center">
       
       {/* 1. KONTEN TENGAH */}
-      <div className="absolute inset-0 flex items-center justify-start pl-12 sm:pl-24 lg:pl-32 p-12 z-10 pointer-events-none">
+      <div className="relative z-10 w-full flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto">
         <AnimatePresence mode="wait">
           
           {/* TENTANG KAMI */}
@@ -110,9 +110,9 @@ export default function CoreEngineSection() {
         </AnimatePresence>
       </div>
 
-      {/* 2. RODA NAVIGASI DI KANAN (DENGAN DRAG EVENT) */}
+      {/* 2. RODA NAVIGASI DI KANAN (DISEMBUNYIKAN DI HP AGAR TIDAK MENUTUPI LAYAR & BISA DISCROLL, MUNCUL NORMAL DI DESKTOP) */}
       <div 
-        className="absolute top-1/2 right-0 translate-x-[65%] -translate-y-1/2 w-[700px] h-[700px] z-50 pointer-events-auto cursor-grab active:cursor-grabbing touch-none"
+        className="hidden lg:block absolute top-1/2 right-0 translate-x-[65%] -translate-y-1/2 w-[700px] h-[700px] z-50 pointer-events-auto cursor-grab active:cursor-grabbing touch-none"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
