@@ -20,7 +20,7 @@ export default function CoreEngineSection() {
     setTimeout(() => (isAnimating.current = false), 800);
   };
 
-  // KONTROL DRAG / SWAP: Bisa ditarik di Laptop
+  // KONTROL DRAG / SWAP: Khusus Laptop
   const handlePointerDown = (e: React.PointerEvent) => setDragStartY(e.clientY);
   const handlePointerMove = (e: React.PointerEvent) => {
     if (dragStartY === null) return;
@@ -40,7 +40,7 @@ export default function CoreEngineSection() {
     <section className="relative w-full min-h-screen lg:h-screen overflow-hidden bg-[#030406] font-mono text-white select-none border-b border-slate-900 flex flex-col justify-center">
       
       {/* 1. KONTEN TENGAH */}
-      <div className="relative z-10 w-full flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto pb-32 lg:pb-12">
+      <div className="relative z-10 w-full flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto pb-36 lg:pb-12">
         <AnimatePresence mode="wait">
           
           {/* TENTANG KAMI */}
@@ -109,23 +109,26 @@ export default function CoreEngineSection() {
         </AnimatePresence>
       </div>
 
-      {/* 2. MOBILE NAVIGATION BAR (Hanya muncul di HP/Mobile untuk ganti menu dengan bersih tanpa mengganggu scroll) */}
-      <div className="sm:hidden absolute bottom-4 left-0 w-full px-6 z-50 flex items-center justify-between bg-[#030406]/90 backdrop-blur-md py-3 border-t border-slate-900 pointer-events-auto">
-        <div className="text-[10px] text-slate-400">
-          Menu: <span className="text-emerald-400 font-bold">{menuList[activeMenu]}</span>
-        </div>
-        <div className="flex gap-2">
-          {menuList.map((_, i) => (
+      {/* 2. MOBILE NAVIGATION TABS (Hanya muncul di HP/Mobile: Tombol besar & jelas untuk ganti menu, scroll HP dijamin 100% aman) */}
+      <div className="sm:hidden absolute bottom-4 left-0 w-full px-4 z-50 pointer-events-auto">
+        <div className="bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-2xl p-2 flex items-center justify-between shadow-2xl">
+          {menuList.map((menu, i) => (
             <button
               key={i}
               onClick={() => changeMenu(i)}
-              className={`h-2.5 rounded-full transition-all ${activeMenu === i ? 'w-6 bg-emerald-400' : 'w-2.5 bg-slate-700'}`}
-            />
+              className={`flex-1 py-2.5 mx-0.5 text-[10px] font-bold rounded-xl transition-all ${
+                activeMenu === i 
+                  ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]' 
+                  : 'text-slate-400 hover:text-white bg-slate-800/40'
+              }`}
+            >
+              {menu.replace("Kami", "").trim()}
+            </button>
           ))}
         </div>
       </div>
 
-      {/* 3. RODA NAVIGASI LINGKARAN (DISEMBUNYIKAN TOTAL DI MOBILE/HP MENGGUNAKAN hidden sm:block, MUNCUL NORMAL DI DESKTOP) */}
+      {/* 3. RODA NAVIGASI LINGKARAN (DISEMBUNYIKAN TOTAL DI HP MENGGUNAKAN hidden sm:block, MUNCUL NORMAL DI DESKTOP) */}
       <div 
         className="hidden sm:block absolute top-1/2 right-0 translate-x-[65%] -translate-y-1/2 w-[700px] h-[700px] z-50 pointer-events-auto cursor-grab active:cursor-grabbing touch-none"
         onPointerDown={handlePointerDown}
