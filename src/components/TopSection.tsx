@@ -194,7 +194,7 @@ export default function TopSection() {
         </div>
       </div>
 
-     {/* KONTEN KANAN - Perbaikan total untuk mobile agar tidak bisa di-otak-atik */}
+      {/* KONTEN KANAN (BITCOIN 3D - Fitur otak-atik/putar manual dimatikan total agar aman di mobile & desktop) */}
       <div className="w-full h-[380px] lg:w-2/5 lg:h-screen relative z-0 pointer-events-none lg:pointer-events-auto">
         <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
           <ambientLight intensity={0.8} />
@@ -206,11 +206,9 @@ export default function TopSection() {
           </Suspense>
           <OrbitControls 
             enableZoom={false} 
+            enableRotate={false} 
             autoRotate 
             autoRotateSpeed={0.5} 
-            // KHUSUS MOBILE: Menonaktifkan semua interaksi sentuh agar koin TIDAK BISA diputar
-            // Menambahkan enableRotate prop yang dikendalikan oleh media query atau sekadar false
-            enableRotate={false} 
             // @ts-ignore
             touchAction="none" 
           />
