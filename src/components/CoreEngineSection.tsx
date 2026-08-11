@@ -26,7 +26,6 @@ export default function CoreEngineSection() {
     if (dragStartY === null) return;
     const diff = dragStartY - e.clientY;
     
-    // Kalau ditarik cukup jauh, ganti menunya
     if (diff > 40) { 
       changeMenu(activeMenu + 1); 
       setDragStartY(e.clientY); 
@@ -41,7 +40,7 @@ export default function CoreEngineSection() {
     <section className="relative w-full min-h-screen lg:h-screen overflow-hidden bg-[#030406] font-mono text-white select-none border-b border-slate-900 flex flex-col justify-center">
       
       {/* 1. KONTEN TENGAH */}
-      <div className="relative z-10 w-full flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto">
+      <div className="relative z-10 w-full flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto pb-48 lg:pb-12">
         <AnimatePresence mode="wait">
           
           {/* TENTANG KAMI */}
@@ -49,7 +48,7 @@ export default function CoreEngineSection() {
             <motion.div key={0} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)' }} transition={{ duration: 0.6 }} className="max-w-2xl text-left pointer-events-auto">
               <span className="text-xs text-emerald-400 tracking-widest uppercase block mb-4">// SECTION 01</span>
               <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-wider text-white mb-6">Tentang Kami</h1>
-              <p className="text-slate-400 text-sm leading-relaxed">Kami adalah pionir dalam membangun ekosistem Web3 di Indonesia. Berpusat di Banyuwangi, misi kami adalah mempercepat adopsi teknologi desentralisasi melalui solusi yang inovatif dan terukur.</p>
+              <p className="text-slate-400 text-sm sm:text-base leading-relaxed">Kami adalah pionir dalam membangun ekosistem Web3 di Indonesia. Berpusat di Banyuwangi, misi kami adalah mempercepat adopsi teknologi desentralisasi melalui solusi yang inovatif dan terukur.</p>
             </motion.div>
           )}
 
@@ -110,9 +109,9 @@ export default function CoreEngineSection() {
         </AnimatePresence>
       </div>
 
-      {/* 2. RODA NAVIGASI DI KANAN (DISEMBUNYIKAN DI HP AGAR TIDAK MENUTUPI LAYAR & BISA DISCROLL, MUNCUL NORMAL DI DESKTOP) */}
+      {/* 2. RODA NAVIGASI (RESPONSIF: Dikecilkan dan diposisikan aman di mobile, ukuran normal di desktop) */}
       <div 
-        className="hidden lg:block absolute top-1/2 right-0 translate-x-[65%] -translate-y-1/2 w-[700px] h-[700px] z-50 pointer-events-auto cursor-grab active:cursor-grabbing touch-none"
+        className="absolute bottom-[-150px] right-[-150px] sm:bottom-auto sm:right-0 sm:top-1/2 sm:translate-x-[65%] sm:-translate-y-1/2 w-[450px] h-[450px] sm:w-[700px] sm:h-[700px] z-50 pointer-events-auto cursor-grab active:cursor-grabbing touch-none scale-75 sm:scale-100 origin-bottom-right sm:origin-center"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
