@@ -20,16 +20,17 @@ export default function CoreEngineSection() {
     setTimeout(() => (isAnimating.current = false), 800);
   };
 
-  // KONTROL DRAG: Hanya bereaksi saat diklik + tarik di area lingkaran
+  // KONTROL DRAG / SWAP: Bisa ditarik di HP maupun Laptop
   const handlePointerDown = (e: React.PointerEvent) => setDragStartY(e.clientY);
   const handlePointerMove = (e: React.PointerEvent) => {
     if (dragStartY === null) return;
     const diff = dragStartY - e.clientY;
     
-    if (diff > 40) { 
+    // Kalau ditarik ke atas/bawah cukup jauh, ganti menu (swap)
+    if (diff > 30) { 
       changeMenu(activeMenu + 1); 
       setDragStartY(e.clientY); 
-    } else if (diff < -40) { 
+    } else if (diff < -30) { 
       changeMenu(activeMenu - 1); 
       setDragStartY(e.clientY); 
     }
@@ -109,9 +110,9 @@ export default function CoreEngineSection() {
         </AnimatePresence>
       </div>
 
-      {/* 2. RODA NAVIGASI (RESPONSIF: Dikecilkan dan diposisikan aman di mobile, ukuran normal di desktop) */}
+      {/* 2. RODA NAVIGASI (Bisa di-swap/geser atau diklik langsung teks/titiknya) */}
       <div 
-        className="absolute bottom-[-150px] right-[-150px] sm:bottom-auto sm:right-0 sm:top-1/2 sm:translate-x-[65%] sm:-translate-y-1/2 w-[450px] h-[450px] sm:w-[700px] sm:h-[700px] z-50 pointer-events-auto cursor-grab active:cursor-grabbing touch-none scale-75 sm:scale-100 origin-bottom-right sm:origin-center"
+        className="absolute bottom-[-160px] right-[-160px] sm:bottom-auto sm:right-0 sm:top-1/2 sm:translate-x-[65%] sm:-translate-y-1/2 w-[450px] h-[450px] sm:w-[700px] sm:h-[700px] z-50 pointer-events-auto cursor-grab active:cursor-grabbing touch-none scale-75 sm:scale-100 origin-bottom-right sm:origin-center"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -128,12 +129,12 @@ export default function CoreEngineSection() {
               <div key={i} className="absolute top-1/2 left-1/2 flex items-center" style={{ transform: `translate(-50%, -50%) rotate(${rotation}deg) translateX(-${RADIUS}px)` }}>
                 <div className="flex items-center gap-4 transition-all duration-700" style={{ transform: `rotate(${-rotation + activeMenu * ANGLE_STEP}deg)` }}>
                   
-                  {/* Teks Menu - Bisa diklik */}
+                  {/* Teks Menu - Bisa diklik langsung */}
                   <span onClick={(e) => { e.stopPropagation(); changeMenu(i); }} className={`uppercase tracking-widest text-xs font-bold cursor-pointer transition-all duration-300 ${isActive ? 'text-emerald-400 opacity-150 scale-105' : 'text-slate-500 opacity-30 hover:opacity-80'}`}>
                     {menu}
                   </span>
                   
-                  {/* Titik Tombol - Bisa diklik */}
+                  {/* Titik Tombol - Bisa diklik langsung */}
                   <button onClick={(e) => { e.stopPropagation(); changeMenu(i); }} className={`rounded-full transition-all duration-300 cursor-pointer ${isActive ? 'w-4 h-4 bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.9)]' : 'w-2.5 h-2.5 bg-slate-700 hover:bg-slate-400'}`} />
                 
                 </div>

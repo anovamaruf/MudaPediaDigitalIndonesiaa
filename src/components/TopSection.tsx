@@ -194,7 +194,7 @@ export default function TopSection() {
         </div>
       </div>
 
-      {/* KONTEN KANAN (BITCOIN 3D - Diberi pointer-events-none di HP agar jari bisa scroll halaman dengan bebas) */}
+      {/* KONTEN KANAN (BITCOIN 3D - Diberi pointer-events-none di HP agar jari bisa scroll halaman dengan bebas tanpa macet) */}
       <div className="w-full h-[380px] lg:w-2/5 lg:h-screen relative z-0 pointer-events-none lg:pointer-events-auto">
         <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
           <ambientLight intensity={0.8} />
