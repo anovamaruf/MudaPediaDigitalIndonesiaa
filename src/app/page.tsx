@@ -6,7 +6,6 @@ import { AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import SplashScene from '@/components/SplashScene';
 import TopSection from '@/components/TopSection';
-import MarqueeSection from '@/components/MarqueeSection';
 import CoreEngineSection from '@/components/CoreEngineSection';
 import FooterSection from '@/components/FooterSection';
 
@@ -23,7 +22,6 @@ export default function Home() {
         <div className="scroll-smooth">
           <Navbar />
           <TopSection />
-          <MarqueeSection />
           <CoreEngineSection />
           <FooterSection />
         </div>
