@@ -7,6 +7,8 @@ import Navbar from '@/components/Navbar';
 import SplashScene from '@/components/SplashScene';
 import TopSection from '@/components/TopSection';
 import CoreEngineSection from '@/components/CoreEngineSection';
+import CryptoCalculator from '@/components/CryptoCalculator';
+import CryptoGlossary from '@/components/CryptoGlossary'; // <-- Import komponen baru
 import FooterSection from '@/components/FooterSection';
 
 export default function Home() {
@@ -22,10 +24,12 @@ export default function Home() {
         <div className="scroll-smooth">
           <Navbar />
           <TopSection />
+          <CryptoCalculator />
+          <CryptoGlossary /> {/* <-- Pasang di sini */}
           <CoreEngineSection />
           <FooterSection />
         </div>
       )}
     </main>
   );
-}
+}   
