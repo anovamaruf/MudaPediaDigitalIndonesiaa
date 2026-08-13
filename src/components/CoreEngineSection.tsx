@@ -70,10 +70,29 @@ export default function CoreEngineSection() {
   const handlePointerUp = () => setDragStartY(null);
 
   return (
-    <section className="relative w-full min-h-screen lg:h-screen overflow-hidden bg-[#030406] font-mono text-white select-none border-b border-slate-900 flex flex-col justify-center">
+    <section className="relative w-full min-h-screen lg:h-screen overflow-hidden bg-[#030406] font-mono text-white select-none border-b border-slate-900 flex flex-col justify-center pt-20 lg:pt-0">
       
+      {/* 2. MOBILE NAVIGATION TABS (Dipindah ke atas sesuai permintaan, tanpa mengubah kode lainnya) */}
+      <div className="sm:hidden absolute top-4 left-0 w-full px-4 z-50 pointer-events-auto">
+        <div className="bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-2xl p-2 flex items-center justify-between shadow-2xl">
+          {menuList.map((menu, i) => (
+            <button
+              key={i}
+              onClick={() => changeMenu(i)}
+              className={`flex-1 py-2.5 mx-0.5 text-[10px] font-bold rounded-xl transition-all ${
+                activeMenu === i 
+                  ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]' 
+                  : 'text-slate-400 hover:text-white bg-slate-800/40'
+              }`}
+            >
+              {menu.replace("Kami", "").trim()}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* 1. KONTEN TENGAH */}
-      <div className="relative z-10 w-full flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto pb-36 lg:pb-12">
+      <div className="relative z-10 w-full flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto pb-12 lg:pb-12">
         <AnimatePresence mode="wait">
           
           {/* TENTANG KAMI */}
@@ -164,25 +183,6 @@ export default function CoreEngineSection() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-
-      {/* 2. MOBILE NAVIGATION TABS (Hanya muncul di HP/Mobile: Tombol besar & jelas untuk ganti menu, scroll HP dijamin 100% aman) */}
-      <div className="sm:hidden absolute bottom-4 left-0 w-full px-4 z-50 pointer-events-auto">
-        <div className="bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-2xl p-2 flex items-center justify-between shadow-2xl">
-          {menuList.map((menu, i) => (
-            <button
-              key={i}
-              onClick={() => changeMenu(i)}
-              className={`flex-1 py-2.5 mx-0.5 text-[10px] font-bold rounded-xl transition-all ${
-                activeMenu === i 
-                  ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]' 
-                  : 'text-slate-400 hover:text-white bg-slate-800/40'
-              }`}
-            >
-              {menu.replace("Kami", "").trim()}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* 3. RODA NAVIGASI LINGKARAN (DISEMBUNYIKAN TOTAL DI HP MENGGUNAKAN hidden sm:block, MUNCUL NORMAL DI DESKTOP) */}
