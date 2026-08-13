@@ -69,8 +69,8 @@ export default function Home() {
             <div className="space-y-6">
               <div>
                 {/* TAG PILL DISAMAKAN DENGAN KAMUS SANTAI */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/5 text-emerald-400 text-xs font-bold tracking-wider mb-3 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/5 text-emerald-400 text-[10px] font-bold tracking-widest mb-4">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   MUDAPEDIA TRACK RECORD
                 </div>
 

@@ -3,7 +3,7 @@
 import React, { Suspense, useMemo, useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Float } from '@react-three/drei';
+import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -334,9 +334,9 @@ export default function TopSection() {
           </div>
         </div>
 
-        {/* KONTEN KANAN (BITCOIN 3D DENGAN ANIMASI SCALE KECIL KE BESAR) */}
-        <div className="w-full h-[380px] lg:w-2/5 lg:h-screen relative z-0 pointer-events-none lg:pointer-events-auto">
-          <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
+        {/* KONTEN KANAN (BITCOIN 3D SEBAGAI PAJANGAN/DEKORASI - TIDAK BISA DI-OTAK-ATIK & AMAN SCROLLING) */}
+        <div className="w-full h-[380px] lg:w-2/5 lg:h-screen relative z-0 pointer-events-none">
+          <Canvas className="pointer-events-none" camera={{ position: [0, 0, 8], fov: 50 }}>
             <ambientLight intensity={0.8} />
             <directionalLight position={[10, 10, 5]} intensity={2} color="#ffffff" />
             <Suspense fallback={null}>
@@ -344,14 +344,6 @@ export default function TopSection() {
                 <CleanBitcoin3D />
               </Float>
             </Suspense>
-            <OrbitControls 
-              enableZoom={false} 
-              enableRotate={false} 
-              autoRotate 
-              autoRotateSpeed={0.5} 
-              // @ts-ignore
-              touchAction="none" 
-            />
           </Canvas>
         </div>
       </div>
