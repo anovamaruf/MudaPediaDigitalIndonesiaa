@@ -2,14 +2,22 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import PricingSection from '@/components/PricingSection'; // <-- Diimpor ke sini
+import PricingSection from '@/components/PricingSection';
 
 const menuList = ["Tentang Kami", "Paket", "Tim Kami", "Galeri"];
 const ANGLE_STEP = 35;
 const RADIUS = 380;
 
-export default function CoreEngineSection() {
-  const [activeMenu, setActiveMenu] = useState(0);
+interface CoreEngineProps {
+  activeMenu?: number;
+  setActiveMenu?: (index: number) => void;
+}
+
+export default function CoreEngineSection({ activeMenu: externalActiveMenu, setActiveMenu: externalSetActiveMenu }: CoreEngineProps) {
+  const [internalMenu, setInternalMenu] = useState(0);
+  const activeMenu = externalActiveMenu !== undefined ? externalActiveMenu : internalMenu;
+  const setActiveMenu = externalSetActiveMenu || setInternalMenu;
+
   const isAnimating = useRef(false);
   const [dragStartY, setDragStartY] = useState<number | null>(null);
 
@@ -70,7 +78,7 @@ export default function CoreEngineSection() {
             </motion.div>
           )}
 
-          {/* PAKET (Dipanggil dari komponen terpisah PricingSection) */}
+          {/* PAKET */}
           {activeMenu === 1 && (
             <motion.div key={1} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)' }} transition={{ duration: 0.6 }} className="w-full max-w-5xl pointer-events-auto">
               <PricingSection />
