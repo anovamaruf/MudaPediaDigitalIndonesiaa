@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PricingSection from '@/components/PricingSection';
+import TeamSection from '@/components/TeamSection'; // <-- Diimpor ke sini
 
 const menuList = ["Tentang Kami", "Paket", "Tim Kami", "Galeri"];
 const ANGLE_STEP = 35;
@@ -85,21 +86,10 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
             </motion.div>
           )}
 
-          {/* TIM KAMI */}
+          {/* TIM KAMI (Dipindah ke file terpisah TeamSection.tsx) */}
           {activeMenu === 2 && (
             <motion.div key={2} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)' }} transition={{ duration: 0.6 }} className="w-full max-w-4xl pointer-events-auto">
-              <span className="text-xs text-emerald-400 tracking-widest uppercase block mb-4">// SECTION 03 - TIM & TALENTA</span>
-              <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, duration: 0.6 }} className="bg-[#0a0c16] border border-slate-800 rounded-3xl p-8">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  {['Siti Nurhaliza', 'Ahmad Rizky', 'Budi Santoso', 'Dina Surya'].map((nama, idx) => (
-                    <motion.div key={idx} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 + (idx * 0.1), type: 'spring' }} className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
-                      <div className="w-16 h-16 bg-slate-800 rounded-full mx-auto mb-3" />
-                      <h4 className="text-xs font-bold text-white">{nama}</h4>
-                      <p className="text-[9px] text-emerald-400 mt-1">Web3 Developer</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+              <TeamSection />
             </motion.div>
           )}
 
