@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { sfx } from '@/utils/soundFX'; // <-- Modul efek suara interaktif
 
 interface Member {
   name: string;
@@ -172,14 +173,14 @@ export default function TeamSection() {
       <div className="absolute top-6 right-8 z-20">
         {viewMode !== 'alumni' && viewMode !== 'all-alumni' ? (
           <button
-            onClick={() => setViewMode('alumni')}
+            onClick={() => { sfx.playClick(); setViewMode('alumni'); }}
             className="text-[10px] font-bold text-slate-400 hover:text-emerald-400 bg-slate-900/80 border border-slate-700/80 px-3 py-1.5 rounded-xl transition-all cursor-pointer shadow-md"
           >
             Lihat Alumni →
           </button>
         ) : (
           <button
-            onClick={() => setViewMode('default')}
+            onClick={() => { sfx.playClick(); setViewMode('default'); }}
             className="text-[10px] font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 border border-rose-500/30 px-3 py-1.5 rounded-xl transition-all cursor-pointer shadow-md"
           >
             ✕ Tutup Alumni
@@ -205,7 +206,7 @@ export default function TeamSection() {
               {currentList.map((item, idx) => (
                 <div 
                   key={idx} 
-                  onClick={() => setSelectedMember(item)}
+                  onClick={() => { sfx.playSuccess(); setSelectedMember(item); }}
                   className={`bg-slate-900 border border-slate-800 hover:border-emerald-500/60 rounded-xl p-4 text-center cursor-pointer transition-all duration-200 group flex flex-col justify-between ${viewMode.includes('alumni') ? 'border-dashed opacity-90' : ''}`}
                 >
                   <div>
@@ -232,7 +233,7 @@ export default function TeamSection() {
         <div className="flex justify-end mt-4 pt-2">
           {viewMode === 'default' && (
             <button
-              onClick={() => setViewMode('all')}
+              onClick={() => { sfx.playClick(); setViewMode('all'); }}
               className="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-1.5"
             >
               <span>Lihat Semua Tim</span>
@@ -242,7 +243,7 @@ export default function TeamSection() {
 
           {viewMode === 'all' && (
             <button
-              onClick={() => setViewMode('default')}
+              onClick={() => { sfx.playClick(); setViewMode('default'); }}
               className="text-[10px] font-bold text-slate-400 hover:text-white bg-slate-800 border border-slate-700 px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-1.5"
             >
               <span>Tutup Kembali</span>
@@ -252,7 +253,7 @@ export default function TeamSection() {
 
           {viewMode === 'alumni' && (
             <button
-              onClick={() => setViewMode('all-alumni')}
+              onClick={() => { sfx.playClick(); setViewMode('all-alumni'); }}
               className="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-1.5"
             >
               <span>Lihat Semua Alumni</span>
@@ -262,7 +263,7 @@ export default function TeamSection() {
 
           {viewMode === 'all-alumni' && (
             <button
-              onClick={() => setViewMode('alumni')}
+              onClick={() => { sfx.playClick(); setViewMode('alumni'); }}
               className="text-[10px] font-bold text-slate-400 hover:text-white bg-slate-800 border border-slate-700 px-3.5 py-2 rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-1.5"
             >
               <span>Tutup Kembali</span>
@@ -281,7 +282,7 @@ export default function TeamSection() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 pointer-events-auto font-mono"
-            onClick={() => setSelectedMember(null)}
+            onClick={() => { sfx.playClick(); setSelectedMember(null); }}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -293,7 +294,7 @@ export default function TeamSection() {
             >
               {/* Tombol Close */}
               <button
-                onClick={() => setSelectedMember(null)}
+                onClick={() => { sfx.playClick(); setSelectedMember(null); }}
                 className="absolute top-4 right-4 text-slate-400 hover:text-white text-xs w-7 h-7 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center cursor-pointer transition-colors"
               >
                 ✕
@@ -342,6 +343,7 @@ export default function TeamSection() {
                     href={selectedMember.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => sfx.playClick()}
                     className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500 flex items-center justify-center text-slate-300 hover:text-emerald-400 transition-all text-xs font-bold shadow-md cursor-pointer"
                     title="LinkedIn / ED"
                   >
@@ -351,6 +353,7 @@ export default function TeamSection() {
                     href={selectedMember.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => sfx.playClick()}
                     className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500 flex items-center justify-center text-slate-300 hover:text-emerald-400 transition-all text-xs font-bold shadow-md cursor-pointer"
                     title="Instagram"
                   >
