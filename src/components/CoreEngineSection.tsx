@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PricingSection from '@/components/PricingSection';
 import TeamSection from '@/components/TeamSection';
@@ -25,39 +25,116 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
   const activeMenu = externalActiveMenu !== undefined ? externalActiveMenu : internalMenu;
   const setActiveMenu = externalSetActiveMenu || setInternalMenu;
 
+  const activeMenuRef = useRef(activeMenu);
+  activeMenuRef.current = activeMenu;
+
   const isAnimating = useRef(false);
-  const [dragStartY, setDragStartY] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  const touchStartY = useRef<number>(0);
+  const scrollAccumulator = useRef<number>(0);
   const lastScrollTime = useRef(0);
 
   const changeMenu = (newIndex: number) => {
     if (newIndex < 0 || newIndex >= menuList.length || isAnimating.current) return;
     isAnimating.current = true;
     setActiveMenu(newIndex);
-    setTimeout(() => (isAnimating.current = false), 800);
+    setTimeout(() => {
+      isAnimating.current = false;
+    }, 500);
   };
 
-  // Mekanisme Scrollytelling / Scroll-Locking khusus Mobile (Tambahan fungsionalitas poin #4)
-  const handleWheelMobile = (e: React.WheelEvent) => {
-    if (window.innerWidth >= 1024) return; // Hanya aktif di mobile/tablet kecil
+  // --- SMOOTH SCROLL-LOCKING & ACCUMULATOR (UX PREMIUM) ---
+  useEffect(() => {
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return;
 
-    const now = Date.now();
-    if (now - lastScrollTime.current < 700) return;
-
-    if (e.deltaY > 20) {
-      if (activeMenu < menuList.length - 1) {
+    const handleWheel = (e: WheelEvent) => {
+      const now = Date.now();
+      
+      // Jika sedang animasi transisi, abaikan dulu agar tidak menumpuk
+      if (isAnimating.current) {
         e.preventDefault();
-        changeMenu(activeMenu + 1);
-        lastScrollTime.current = now;
+        return;
       }
-    } else if (e.deltaY < -20) {
-      if (activeMenu > 0) {
-        e.preventDefault();
-        changeMenu(activeMenu - 1);
-        lastScrollTime.current = now;
-      }
-    }
-  };
 
+      // Akumulasi tenaga scroll (mengatasi sensitivitas trackpad vs mouse wheel)
+      scrollAccumulator.current += e.deltaY;
+
+      // Ambang batas (threshold) untuk memicu perpindahan slide
+      const threshold = 40;
+
+      if (scrollAccumulator.current > threshold) {
+        // Scroll ke bawah
+        if (activeMenuRef.current < menuList.length - 1) {
+          e.preventDefault();
+          scrollAccumulator.current = 0;
+          changeMenu(activeMenuRef.current + 1);
+        } else {
+          // Jika sudah di slide terakhir (Galeri), biarkan halaman lepas ke bawah (Track Record/Footer)
+          scrollAccumulator.current = 0;
+        }
+      } else if (scrollAccumulator.current < -threshold) {
+        // Scroll ke atas
+        if (activeMenuRef.current > 0) {
+          e.preventDefault();
+          scrollAccumulator.current = 0;
+          changeMenu(activeMenuRef.current - 1);
+        } else {
+          // Jika sudah di slide pertama (Tentang Kami), biarkan halaman lepas ke atas
+          scrollAccumulator.current = 0;
+        }
+      } else {
+        // Jika belum melewati threshold tapi berada di dalam core engine, kunci sementara agar tidak bocor ke bawah
+        if (activeMenuRef.current > 0 && activeMenuRef.current < menuList.length - 1) {
+          e.preventDefault();
+        }
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY.current = e.touches[0].clientY;
+      scrollAccumulator.current = 0;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touchEndY = e.touches[0].clientY;
+      const diff = touchStartY.current - touchEndY;
+
+      if (isAnimating.current) {
+        e.preventDefault();
+        return;
+      }
+
+      if (diff > 35) {
+        // Swipe ke atas (gerakan jari ke atas untuk melihat konten berikutnya)
+        if (activeMenuRef.current < menuList.length - 1) {
+          e.preventDefault();
+          changeMenu(activeMenuRef.current + 1);
+          touchStartY.current = touchEndY;
+        }
+      } else if (diff < -35) {
+        // Swipe ke bawah (gerakan jari ke bawah untuk kembali ke slide sebelumnya)
+        if (activeMenuRef.current > 0) {
+          e.preventDefault();
+          changeMenu(activeMenuRef.current - 1);
+          touchStartY.current = touchEndY;
+        }
+      }
+    };
+
+    sectionEl.addEventListener('wheel', handleWheel, { passive: false });
+    sectionEl.addEventListener('touchstart', handleTouchStart, { passive: true });
+    sectionEl.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      sectionEl.removeEventListener('wheel', handleWheel);
+      sectionEl.removeEventListener('touchstart', handleTouchStart);
+      sectionEl.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [setActiveMenu]);
+
+  const [dragStartY, setDragStartY] = useState<number | null>(null);
   const handlePointerDown = (e: React.PointerEvent) => setDragStartY(e.clientY);
   const handlePointerMove = (e: React.PointerEvent) => {
     if (dragStartY === null) return;
@@ -75,8 +152,8 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
 
   return (
     <section 
+      ref={sectionRef}
       id="pricing-section" 
-      onWheel={handleWheelMobile}
       className={`relative w-full min-h-screen lg:h-screen overflow-hidden font-mono select-none border-b flex flex-col justify-center pt-20 lg:pt-0 transition-colors duration-300 ${
         isDark ? 'bg-[#030406] border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-900'
       }`}
@@ -103,7 +180,7 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
         </div>
         <div className="text-center mt-2">
           <span className="text-[9px] text-blue-400 tracking-widest uppercase font-bold animate-pulse">
-            ↓ Scroll untuk lanjut slide ({activeMenu + 1}/{menuList.length}) ↓
+            🔒 SECTION PINNED ({activeMenu + 1}/4) — Scroll untuk navigasi
           </span>
         </div>
       </div>
@@ -157,8 +234,8 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
                     isActive ? (isDark ? 'w-4 h-4 bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.9)]' : 'w-4 h-4 bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.5)]') : (isDark ? 'w-2.5 h-2.5 bg-slate-700 hover:bg-slate-400' : 'w-2.5 h-2.5 bg-slate-300 hover:bg-slate-500')
                   }`} />
                 
+                </div>
               </div>
-            </div>
             );
           })}
         </div>

@@ -56,14 +56,11 @@ export default function TeamSection() {
     viewMode === 'all-alumni' ? allAlumniMembers : mainTeam;
 
   return (
-    <div className={`border rounded-3xl p-8 relative w-full shadow-2xl ${
-      isDark ? 'bg-[#0a0c16] border-slate-800 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
-    }`}>
+    // Kontainer luar dikunci permanen bernuansa gelap agar cover kotak selalu terlihat jelas di mode terang maupun gelap
+    <div className="border rounded-3xl p-8 relative w-full shadow-2xl bg-[#0a0c16] border-slate-800 text-white">
       <div className="absolute top-6 right-8 z-20">
         {viewMode !== 'alumni' && viewMode !== 'all-alumni' ? (
-          <button onClick={() => { sfx.playClick(); setViewMode('alumni'); }} className={`text-[10px] font-bold px-3 py-1.5 rounded-xl border transition-all cursor-pointer shadow-md ${
-            isDark ? 'text-slate-400 hover:text-blue-400 bg-slate-900/80 border-slate-700' : 'text-slate-600 hover:text-blue-600 bg-white border-slate-300'
-          }`}>
+          <button onClick={() => { sfx.playClick(); setViewMode('alumni'); }} className="text-[10px] font-bold px-3 py-1.5 rounded-xl border transition-all cursor-pointer shadow-md text-slate-400 hover:text-blue-400 bg-slate-900/80 border-slate-700">
             Lihat Alumni 
           </button>
         ) : (
@@ -73,7 +70,7 @@ export default function TeamSection() {
         )}
       </div>
 
-      <span className={`text-xs tracking-widest uppercase block mb-4 font-mono font-bold ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+      <span className="text-xs tracking-widest uppercase block mb-4 font-mono font-bold text-blue-400">
         {viewMode === 'alumni' || viewMode === 'all-alumni' ? 'ALUMNI KAMI' : 'TIM & TALENTA'}
       </span>
 
@@ -82,18 +79,16 @@ export default function TeamSection() {
           <motion.div key={viewMode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }} className="w-full">
             <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 ${viewMode === 'all' || viewMode === 'all-alumni' ? 'max-h-[380px] overflow-y-auto pr-1' : ''}`}>
               {currentList.map((item, idx) => (
-                <div key={idx} onClick={() => { sfx.playSuccess(); setSelectedMember(item); }} className={`border rounded-xl p-4 text-center cursor-pointer transition-all duration-200 group flex flex-col justify-between ${
-                  isDark ? 'bg-slate-900 border-slate-800 hover:border-blue-500/60' : 'bg-white border-slate-200 hover:border-blue-500/50 shadow-sm'
-                } ${viewMode.includes('alumni') ? 'border-dashed opacity-90' : ''}`}>
+                <div key={idx} onClick={() => { sfx.playSuccess(); setSelectedMember(item); }} className={`border rounded-xl p-4 text-center cursor-pointer transition-all duration-200 group flex flex-col justify-between bg-slate-900 border-slate-800 hover:border-blue-500/60 ${viewMode.includes('alumni') ? 'border-dashed opacity-90' : ''}`}>
                   <div>
-                    <div className={`w-16 h-16 rounded-full mx-auto mb-3 transition-colors ${isDark ? 'bg-slate-800 group-hover:bg-blue-500/20' : 'bg-slate-100 group-hover:bg-blue-50'}`} />
-                    <h4 className={`text-xs font-bold transition-colors ${isDark ? 'text-white group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>{item.name}</h4>
-                    <p className={`text-[9px] mt-1 font-mono uppercase tracking-wider ${viewMode.includes('alumni') ? 'text-slate-500' : (isDark ? 'text-blue-400' : 'text-blue-600')}`}>
+                    <div className="w-16 h-16 rounded-full mx-auto mb-3 transition-colors bg-slate-800 group-hover:bg-blue-500/20" />
+                    <h4 className="text-xs font-bold transition-colors text-white group-hover:text-blue-400">{item.name}</h4>
+                    <p className={`text-[9px] mt-1 font-mono uppercase tracking-wider ${viewMode.includes('alumni') ? 'text-slate-500' : 'text-blue-400'}`}>
                       {item.title}
                     </p>
                   </div>
-                  <div className={`mt-3 pt-2 border-t flex justify-end ${isDark ? 'border-slate-800/80' : 'border-slate-100'}`}>
-                    <span className={`text-[9px] font-bold group-hover:underline ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                  <div className="mt-3 pt-2 border-t flex justify-end border-slate-800/80">
+                    <span className="text-[9px] font-bold group-hover:underline text-blue-400">
                       Lihat Selengkapnya →
                     </span>
                   </div>
@@ -105,22 +100,22 @@ export default function TeamSection() {
 
         <div className="flex justify-end mt-4 pt-2">
           {viewMode === 'default' && (
-            <button onClick={() => { sfx.playClick(); setViewMode('all'); }} className={`text-[10px] font-bold px-3.5 py-2 rounded-xl border transition-all cursor-pointer shadow-md flex items-center gap-1.5 ${isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/30' : 'text-blue-600 bg-blue-50 border-blue-200'}`}>
+            <button onClick={() => { sfx.playClick(); setViewMode('all'); }} className="text-[10px] font-bold px-3.5 py-2 rounded-xl border transition-all cursor-pointer shadow-md flex items-center gap-1.5 text-blue-400 bg-blue-500/10 border-blue-500/30">
               <span>Lihat Semua Tim</span><span>↑</span>
             </button>
           )}
           {viewMode === 'all' && (
-            <button onClick={() => { sfx.playClick(); setViewMode('default'); }} className={`text-[10px] font-bold px-3.5 py-2 rounded-xl border transition-all cursor-pointer shadow-md flex items-center gap-1.5 ${isDark ? 'text-slate-400 bg-slate-800 border-slate-700' : 'text-slate-600 bg-slate-100 border-slate-300'}`}>
+            <button onClick={() => { sfx.playClick(); setViewMode('default'); }} className="text-[10px] font-bold px-3.5 py-2 rounded-xl border transition-all cursor-pointer shadow-md flex items-center gap-1.5 text-slate-400 bg-slate-800 border-slate-700">
               <span>Tutup Kembali</span><span>↓</span>
             </button>
           )}
           {viewMode === 'alumni' && (
-            <button onClick={() => { sfx.playClick(); setViewMode('all-alumni'); }} className={`text-[10px] font-bold px-3.5 py-2 rounded-xl border transition-all cursor-pointer shadow-md flex items-center gap-1.5 ${isDark ? 'text-blue-400 bg-blue-500/10 border-blue-500/30' : 'text-blue-600 bg-blue-50 border-blue-200'}`}>
+            <button onClick={() => { sfx.playClick(); setViewMode('all-alumni'); }} className="text-[10px] font-bold px-3.5 py-2 rounded-xl border transition-all cursor-pointer shadow-md flex items-center gap-1.5 text-blue-400 bg-blue-500/10 border-blue-500/30">
               <span>Lihat Semua Alumni</span><span>↑</span>
             </button>
           )}
           {viewMode === 'all-alumni' && (
-            <button onClick={() => { sfx.playClick(); setViewMode('alumni'); }} className={`text-[10px] font-bold px-3.5 py-2 rounded-xl border transition-all cursor-pointer shadow-md flex items-center gap-1.5 ${isDark ? 'text-slate-400 bg-slate-800 border-slate-700' : 'text-slate-600 bg-slate-100 border-slate-300'}`}>
+            <button onClick={() => { sfx.playClick(); setViewMode('alumni'); }} className="text-[10px] font-bold px-3.5 py-2 rounded-xl border transition-all cursor-pointer shadow-md flex items-center gap-1.5 text-slate-400 bg-slate-800 border-slate-700">
               <span>Tutup Kembali</span><span>↓</span>
             </button>
           )}
@@ -130,46 +125,44 @@ export default function TeamSection() {
       <AnimatePresence>
         {selectedMember && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 pointer-events-auto font-mono" onClick={() => { sfx.playClick(); setSelectedMember(null); }}>
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className={`border p-6 sm:p-7 rounded-3xl max-w-md w-full relative shadow-2xl space-y-5 text-left ${
-              isDark ? 'bg-[#0f1225] border-slate-700 text-white' : 'bg-white border-slate-200 text-slate-900'
-            }`}>
-              <button onClick={() => { sfx.playClick(); setSelectedMember(null); }} className={`absolute top-4 right-4 text-xs w-7 h-7 rounded-full border flex items-center justify-center cursor-pointer ${isDark ? 'bg-slate-900 border-slate-800 text-slate-400' : 'bg-slate-100 border-slate-200 text-slate-600'}`}>✕</button>
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="border p-6 sm:p-7 rounded-3xl max-w-md w-full relative shadow-2xl space-y-5 text-left bg-[#0f1225] border-slate-700 text-white">
+              <button onClick={() => { sfx.playClick(); setSelectedMember(null); }} className="absolute top-4 right-4 text-xs w-7 h-7 rounded-full border flex items-center justify-center cursor-pointer bg-slate-900 border-slate-800 text-slate-400">✕</button>
 
-              <div className={`flex items-center gap-4 border-b pb-4 ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
-                <div className={`w-14 h-14 border rounded-2xl flex items-center justify-center font-bold text-lg shrink-0 ${isDark ? 'bg-gradient-to-br from-blue-500/25 to-indigo-500/25 border-blue-500/50 text-blue-400' : 'bg-blue-50 border-blue-300 text-blue-600'}`}>
+              <div className="flex items-center gap-4 border-b pb-4 border-slate-800">
+                <div className="w-14 h-14 border rounded-2xl flex items-center justify-center font-bold text-lg shrink-0 bg-gradient-to-br from-blue-500/25 to-indigo-500/25 border-blue-500/50 text-blue-400">
                   {selectedMember.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div>
                   <h3 className="text-base font-bold">{selectedMember.name}</h3>
-                  <span className={`inline-block px-2.5 py-0.5 rounded-full border text-[10px] font-bold tracking-wider mt-1 ${isDark ? 'bg-blue-500/10 border-blue-500/30 text-blue-400' : 'bg-blue-50 border-blue-200 text-blue-600'}`}>
+                  <span className="inline-block px-2.5 py-0.5 rounded-full border text-[10px] font-bold tracking-wider mt-1 bg-blue-500/10 border-blue-500/30 text-blue-400">
                     {selectedMember.title}
                   </span>
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <span className={`text-[10px] uppercase tracking-widest block font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>// Kontribusi:</span>
-                <p className={`text-xs leading-relaxed border p-3 rounded-xl ${isDark ? 'bg-slate-900/80 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'}`}>
+                <span className="text-[10px] uppercase tracking-widest block font-bold text-slate-400">// Kontribusi:</span>
+                <p className="text-xs leading-relaxed border p-3 rounded-xl bg-slate-900/80 border-slate-800 text-slate-300">
                   {selectedMember.contribution}
                 </p>
               </div>
 
               <div className="space-y-1.5">
-                <span className={`text-[10px] uppercase tracking-widest block font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>// Proyek Terkait:</span>
+                <span className="text-[10px] uppercase tracking-widest block font-bold text-slate-400">// Proyek Terkait:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {selectedMember.projects.map((proj, pIdx) => (
-                    <span key={pIdx} className={`text-[10px] border px-2.5 py-1 rounded-lg ${isDark ? 'bg-slate-900 border-slate-800 text-blue-400' : 'bg-slate-100 border-slate-200 text-blue-700'}`}>
+                    <span key={pIdx} className="text-[10px] border px-2.5 py-1 rounded-lg bg-slate-900 border-slate-800 text-blue-400">
                       {proj}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className={`pt-2 flex items-center justify-between border-t ${isDark ? 'border-slate-800/80 text-slate-500' : 'border-slate-200 text-slate-400'}`}>
+              <div className="pt-2 flex items-center justify-between border-t border-slate-800/80 text-slate-500">
                 <span className="text-[10px] uppercase tracking-wider">MUDAPEDIA ID // 2026</span>
                 <div className="flex items-center gap-2">
-                  <a href={selectedMember.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => sfx.playClick()} className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-all text-xs font-bold shadow-md cursor-pointer ${isDark ? 'bg-slate-900 border-slate-700 text-slate-300 hover:border-blue-500 hover:text-blue-400' : 'bg-slate-100 border-slate-300 text-slate-700 hover:border-blue-600 hover:text-blue-600'}`}>in</a>
-                  <a href={selectedMember.instagram} target="_blank" rel="noopener noreferrer" onClick={() => sfx.playClick()} className={`w-8 h-8 rounded-xl border flex items-center justify-center transition-all text-xs font-bold shadow-md cursor-pointer ${isDark ? 'bg-slate-900 border-slate-700 text-slate-300 hover:border-blue-500 hover:text-blue-400' : 'bg-slate-100 border-slate-300 text-slate-700 hover:border-blue-600 hover:text-blue-600'}`}>ig</a>
+                  <a href={selectedMember.linkedin} target="_blank" rel="noopener noreferrer" onClick={() => sfx.playClick()} className="w-8 h-8 rounded-xl border flex items-center justify-center transition-all text-xs font-bold shadow-md cursor-pointer bg-slate-900 border-slate-700 text-slate-300 hover:border-blue-500 hover:text-blue-400">in</a>
+                  <a href={selectedMember.instagram} target="_blank" rel="noopener noreferrer" onClick={() => sfx.playClick()} className="w-8 h-8 rounded-xl border flex items-center justify-center transition-all text-xs font-bold shadow-md cursor-pointer bg-slate-900 border-slate-700 text-slate-300 hover:border-blue-500 hover:text-blue-400">ig</a>
                 </div>
               </div>
             </motion.div>
