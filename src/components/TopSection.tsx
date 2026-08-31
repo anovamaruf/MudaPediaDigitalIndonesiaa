@@ -7,8 +7,8 @@ import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useTheme } from '@/context/ThemeContext';
 
-// KOMPONEN 3D: GLOBE JARINGAN GLOBAL WEB3
 function GlobalWeb3Globe3D() {
   const globeRef = useRef<THREE.Group>(null);
 
@@ -20,33 +20,26 @@ function GlobalWeb3Globe3D() {
 
   return (
     <group ref={globeRef}>
-      {/* Inti Bola Bumi / Core Globe */}
       <mesh>
         <sphereGeometry args={[2.2, 64, 64]} />
-        <meshStandardMaterial color="#050b14" emissive="#02060d" roughness={0.9} metalness={0.8} />
+        <meshStandardMaterial color="#0b1329" emissive="#040914" roughness={0.9} metalness={0.8} />
       </mesh>
-
-      {/* Wireframe Grid Global */}
       <mesh>
         <sphereGeometry args={[2.24, 32, 32]} />
-        <meshBasicMaterial color="#10b981" wireframe transparent opacity={0.15} />
+        <meshBasicMaterial color="#3b82f6" wireframe transparent opacity={0.2} />
       </mesh>
-
-      {/* Titik-titik Node Global */}
       {[
         [1.5, 1.2, 0.8], [-1.2, 1.6, 0.5], [0.8, -1.5, 1.1], 
         [-1.8, -0.8, -0.7], [2.0, -0.2, -0.9], [0.1, 2.1, -0.5]
       ].map((pos, idx) => (
         <mesh key={idx} position={pos as [number, number, number]}>
           <sphereGeometry args={[0.08, 16, 16]} />
-          <meshBasicMaterial color="#34d399" />
+          <meshBasicMaterial color="#60a5fa" />
         </mesh>
       ))}
-
-      {/* Lingkaran Orbit Cahaya Global */}
       <mesh rotation={[Math.PI / 3, 0, 0]}>
         <torusGeometry args={[2.8, 0.02, 16, 100]} />
-        <meshBasicMaterial color="#10b981" transparent opacity={0.4} />
+        <meshBasicMaterial color="#3b82f6" transparent opacity={0.4} />
       </mesh>
     </group>
   );
@@ -57,66 +50,21 @@ interface TopSectionProps {
 }
 
 export default function TopSection({ onSelectMenu }: TopSectionProps) {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [cardMousePos, setCardMousePos] = useState<{ [key: number]: { x: number; y: number } }>({});
-  
-  // State untuk tombol Dropdown/Toggle "Eksplor Informasi Cepat" (FAQ)
   const [showFaqDrawer, setShowFaqDrawer] = useState(false);
-
-  // State Harga Kripto Pasar Indonesia (Hot Indo Market - Aman dari CORS)
-  const [cryptoPrices, setCryptoPrices] = useState([
-    { symbol: "BTC/USDT", price: "$68,420.00", change: "+4.2%" },
-    { symbol: "DOGE/USDT", price: "$0.1250", change: "+5.1%" },
-    { symbol: "PEPE/USDT", price: "$0.000012", change: "+8.4%" },
-    { symbol: "XRP/USDT", price: "$0.5420", change: "+1.9%" },
-  ]);
-
   const titleRef = useRef(null);
 
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCardMousePos(prev => ({
-      ...prev,
-      [index]: { x: e.clientX - rect.left, y: e.clientY - rect.top }
-    }));
-  };
-
-  // Efek simulasi pergerakan harga real-time
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCryptoPrices(prev => prev.map(item => {
-        const randomFluctuation = (Math.random() * 0.4 - 0.2);
-        let currentVal = parseFloat(item.price.replace('$', '').replace(/,/g, ''));
-        let newVal = currentVal + (currentVal * (randomFluctuation / 100));
-        
-        const formattedPrice = newVal < 1 
-          ? `$${newVal.toFixed(6)}` 
-          : `$${newVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-        return { ...item, price: formattedPrice };
-      }));
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // GSAP Animation Effect
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      gsap.from(".title-word", {
-        y: 100,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.2,
-        ease: "power4.out"
-      });
+      gsap.from(".title-word", { y: 100, opacity: 0, duration: 1, stagger: 0.2, ease: "power4.out" });
     }, titleRef);
-
     return () => ctx.revert();
   }, []);
 
-  // LOGIKA UTAMA: Mengirim index tab ke Core Engine sekaligus memicu klik DOM
   const handleNavClick = (targetMenuName: string, menuIndex: number) => {
     if (onSelectMenu) {
       onSelectMenu(menuIndex);
@@ -124,7 +72,6 @@ export default function TopSection({ onSelectMenu }: TopSectionProps) {
     const pricingSection = document.getElementById('pricing-section');
     if (pricingSection) {
       pricingSection.scrollIntoView({ behavior: 'smooth' });
-
       setTimeout(() => {
         const buttons = document.querySelectorAll('button, span');
         buttons.forEach((el) => {
@@ -136,7 +83,6 @@ export default function TopSection({ onSelectMenu }: TopSectionProps) {
     }
   };
 
-  // Menu Vertikal Kiri dengan indeks yang jelas untuk TypeScript
   const navLinks = [
     { label: "TENTANG KAMI", action: () => handleNavClick("Tentang Kami", 0) },
     { label: "PAKET", action: () => handleNavClick("Paket", 1) },
@@ -149,123 +95,79 @@ export default function TopSection({ onSelectMenu }: TopSectionProps) {
   ];
 
   const faqs = [
-    { 
-      q: "Apa itu PT Mudapedia Digital Indonesia?", 
-      a: "PT Mudapedia Digital Indonesia adalah perusahaan yang bergerak dibidang pengembangan teknologi dan digitalisasi Web3." 
-    },
-    { 
-      q: "Layanan apa saja yang ditawarkan?", 
-      a: "Pengembangan Smart Contract, Tokenomics, Mobile & Website Web3, hingga Digital Marketing." 
-    },
-    { 
-      q: "Bagaimana cara kerja sama dengan PT Mudapedia?", 
-      a: "Proses dimulai dengan konsultasi awal, penyusunan proposal, hingga eksekusi proyek secara intensif." 
-    },
-    { 
-      q: "Siapa saja klien yang bisa menggunakan layanan?", 
-      a: "Terbuka untuk UMKM, korporasi menengah, hingga proyek desentralisasi global." 
-    },
-    { 
-      q: "Bagaimana cara menghubungi PT Mudapedia?", 
-      a: "Melalui nomor telepon, email resmi, atau formulir kontak di bagian bawah website." 
-    }
+    { q: "Apa itu PT Mudapedia Digital Indonesia?", a: "PT Mudapedia Digital Indonesia adalah perusahaan resmi yang bergerak di bidang pengembangan teknologi infrastruktur desentralisasi dan ekosistem Web3." },
+    { q: "Layanan apa saja yang ditawarkan?", a: "Pengembangan Smart Contract, Tokenomics, Mobile & Website Web3, hingga Konsultasi Digital Enterprise." },
+    { q: "Bagaimana cara kerja sama dengan PT Mudapedia?", a: "Proses dimulai dengan konsultasi awal, penyusunan proposal teknis, hingga eksekusi proyek secara profesional." },
+    { q: "Siapa saja klien yang bisa menggunakan layanan?", a: "Terbuka untuk UMKM, korporasi menengah, hingga inisiatif protokol desentralisasi global." },
+    { q: "Bagaimana cara menghubungi PT Mudapedia?", a: "Melalui nomor kontak resmi, email korporat, atau formulir di bagian bawah website." }
   ];
 
   const partners = [
-    "OFFICIAL PAVO", "NAGAPARA", "GASWIN ARTHA SUAR", "DIGITAL BLOCKCHAIN", "GARUDA EXCHANGER"
+    { name: "Official Pavo", img: "/pavo.webp" },
+    { name: "Nagapara", img: "/nagapara.webp" },
+    { name: "Gaswin Artha Suar", img: "/gasvin.webp" },
+    { name: "Digital Blockchain Indonesia", img: "/blockchain.webp" },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
-  };
-
   return (
-    <div className="relative min-h-screen bg-[#030406] flex flex-col border-b border-slate-900 overflow-x-hidden pt-16">
+    <div className={`relative min-h-screen flex flex-col border-b overflow-x-hidden pt-12 transition-colors ${
+      isDark ? 'bg-[#030406] border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-900'
+    }`}>
       
-      {/* 1. LIVE TRADING TICKER */}
-      <div className="w-full bg-[#030406] border-b border-slate-900/80 py-2.5 px-6 flex items-center justify-between overflow-x-auto no-scrollbar text-xs font-mono">
-        <div className="flex items-center gap-6 shrink-0">
-          <span className="flex items-center gap-2 text-emerald-400 font-bold">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            HOT INDO TRADING MARKET:
-          </span>
-          {cryptoPrices.map((t, idx) => (
-            <div key={idx} className="flex items-center gap-2 text-slate-400">
-              <span className="text-white font-semibold">{t.symbol}</span>
-              <span className="text-slate-300">{t.price}</span>
-              <span className={t.change.startsWith('+') ? 'text-emerald-400' : 'text-rose-400'}>{t.change}</span>
-            </div>
-          ))}
-          <div className="flex items-center gap-2 text-slate-400 border-l border-slate-800 pl-6">
-            <span className="text-white font-semibold">MUDAPEDIA NODE</span>
-            <span className="text-emerald-400">CONNECTED</span>
-          </div>
-        </div>
-      </div>
-
-      <section className="relative w-full min-h-[85vh] bg-[#030406] text-white font-mono flex flex-col justify-between pt-12 pb-12 px-6 sm:px-16 overflow-hidden">
+      <section className={`relative w-full min-h-[90vh] font-mono flex flex-col justify-between py-12 px-6 sm:px-16 overflow-hidden ${
+        isDark ? 'bg-[#030406] text-white' : 'bg-white text-slate-900'
+      }`}>
         
-        {/* Top Info Bar */}
-        <div className="w-full flex justify-between items-center text-xs text-slate-500 border-b border-slate-800/80 pb-4 mb-8">
+        <div className={`w-full flex justify-between items-center text-xs border-b pb-4 mb-8 ${isDark ? 'text-slate-500 border-slate-800' : 'text-slate-400 border-slate-200'}`}>
           <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-emerald-400 font-bold uppercase tracking-widest">
-              MUDAPEDIA // GLOBAL WEB3 OPERATOR
+            <span className={`font-bold uppercase tracking-widest ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+              PT MUDAPEDIA DIGITAL INDONESIA
             </span>
           </div>
           <span className="hidden sm:inline uppercase tracking-widest text-[10px]">
-            BANYUWANGI — WORLDWIDE DECENTRALIZATION
+            BANYUWANGI — DECENTRALIZATION INFRASTRUCTURE
           </span>
         </div>
 
-        {/* Main Hero Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center flex-1 my-auto">
           
-          {/* KOLOM KIRI: Menu Vertikal & Judul Raksasa */}
           <div className="lg:col-span-7 space-y-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
               
-              {/* Menu Vertikal Kiri */}
-              <div className="flex flex-col space-y-3 border-l border-slate-800 pl-4">
+              <div className={`flex flex-col space-y-3 border-l pl-4 ${isDark ? 'border-slate-800' : 'border-slate-200'}`}>
                 {navLinks.map((link, idx) => (
                   <button
                     key={idx}
                     onClick={link.action}
-                    className="text-left text-xs text-slate-400 hover:text-emerald-400 transition-colors tracking-widest uppercase font-bold cursor-pointer"
+                    className={`text-left text-xs transition-colors tracking-widest uppercase font-bold cursor-pointer ${
+                      isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-600 hover:text-blue-600'
+                    }`}
                   >
                     {link.label}
                   </button>
                 ))}
               </div>
 
-              {/* Judul Utama Raksasa (Massive Typography) */}
               <div ref={titleRef}>
-                <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] text-white">
+                <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9]">
                   MUDAPEDIA <br />
-                  DIGITAL <span className="text-[#ff5252]">INDONESIA</span>
+                  DIGITAL <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">INDONESIA</span>
                 </h1>
               </div>
             </div>
 
-            {/* Deskripsi & Tombol Eksplor Informasi Cepat */}
             <div className="space-y-4 pl-0 sm:pl-28">
-              <p className="text-xs sm:text-sm text-slate-400 max-w-lg leading-relaxed">
-                Kecepatan dalam Industri Web3, Blockchain, dan Kripto. Kami adalah perusahaan rintisan yang berada di jantung Web3, blockchain, dan kripto, tempat teknologi dan kreativitas berpadu. Tim kami membangun solusi inovatif yang membantu bisnis berkembang di dunia desentralisasi.
+              <p className={`text-xs sm:text-sm max-w-lg leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                Pionir infrastruktur Web3 dan teknologi desentralisasi di Indonesia. Kami menghadirkan solusi arsitektur digital berstandar global, menggabungkan keamanan tingkat lanjut dan inovasi kreatif untuk korporasi masa depan.
               </p>
 
-              {/* TOMBOL EKSPLOR INFORMASI CEPAT */}
               <div>
                 <button
                   onClick={() => setShowFaqDrawer(!showFaqDrawer)}
-                  className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-bold tracking-wider transition-all duration-300 shadow-[0_0_15px_rgba(16,185,129,0.15)] cursor-pointer"
+                  className={`inline-flex items-center gap-3 px-5 py-2.5 rounded-xl border text-xs font-bold tracking-wider transition-all duration-300 shadow-md cursor-pointer ${
+                    isDark ? 'border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400' : 'border-blue-300 bg-blue-50 hover:bg-blue-100 text-blue-700'
+                  }`}
                 >
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                   {showFaqDrawer ? "TUTUP INFORMASI CEPAT ▲" : "EKSPLOR INFORMASI CEPAT ▼"}
                 </button>
               </div>
@@ -273,9 +175,8 @@ export default function TopSection({ onSelectMenu }: TopSectionProps) {
 
           </div>
 
-          {/* KOLOM KANAN: Globe Jaringan Global 3D */}
           <div className="lg:col-span-5 h-[350px] sm:h-[450px] relative flex items-center justify-center pointer-events-none lg:pointer-events-auto">
-            <div className="absolute w-72 h-72 bg-emerald-500/15 rounded-full blur-[90px] pointer-events-none" />
+            <div className="absolute w-72 h-72 bg-blue-500/10 rounded-full blur-[90px] pointer-events-none" />
             
             <Canvas camera={{ position: [0, 0, 6], fov: 45 }} className="w-full h-full">
               <ambientLight intensity={1} />
@@ -284,79 +185,42 @@ export default function TopSection({ onSelectMenu }: TopSectionProps) {
                 <GlobalWeb3Globe3D />
               </Float>
             </Canvas>
-
-            <div className="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-md border border-slate-800 px-3 py-1.5 rounded-xl text-[10px] text-slate-400 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-              <span>GLOBAL NODES ACTIVE</span>
-            </div>
           </div>
 
         </div>
 
-        {/* FAQ DRAWER */}
         <AnimatePresence>
           {showFaqDrawer && (
-            <motion.div
-              initial={{ opacity: 0, height: 0, y: -10 }}
-              animate={{ opacity: 1, height: "auto", y: 0 }}
-              exit={{ opacity: 0, height: 0, y: -10 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="w-full max-w-3xl mt-8 overflow-hidden"
-            >
-              <div className="p-5 rounded-2xl bg-[#0a0c16]/95 border border-emerald-500/40 backdrop-blur-md shadow-2xl">
-                <h3 className="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-3">
+            <motion.div initial={{ opacity: 0, height: 0, y: -10 }} animate={{ opacity: 1, height: "auto", y: 0 }} exit={{ opacity: 0, height: 0, y: -10 }} transition={{ duration: 0.4, ease: "easeInOut" }} className="w-full max-w-3xl mt-8 overflow-hidden">
+              <div className={`p-5 rounded-2xl backdrop-blur-md shadow-2xl border ${isDark ? 'bg-[#0a0c16]/95 border-blue-500/40 text-white' : 'bg-white/95 border-blue-200 text-slate-900 shadow-slate-200'}`}>
+                <h3 className={`text-xs font-mono uppercase tracking-widest mb-3 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
                   // DIREKTORI FAQ // INFORMASI INSTAN:
                 </h3>
                 
-                <motion.div 
-                  className="space-y-2.5"
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
+                <motion.div className="space-y-2.5" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }} initial="hidden" animate="visible">
                   {faqs.map((faq, i) => {
                     const isOpen = activeIndex === i;
                     return (
-                      <motion.div key={i} variants={itemVariants}>
-                        <div
-                          onClick={() => setActiveIndex(isOpen ? null : i)}
-                          onMouseMove={(e) => handleCardMouseMove(e, i)}
-                          className={`group relative overflow-hidden cursor-pointer rounded-xl p-[1px] transition-all duration-300 ${
-                            isOpen 
-                              ? "border border-emerald-500 bg-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.2)]" 
-                              : "border border-slate-800 bg-slate-900/60 hover:border-slate-700"
-                          }`}
-                        >
-                          <div className="bg-[#030406]/95 backdrop-blur-md rounded-[11px] p-3.5 relative overflow-hidden flex items-center gap-3">
-                            <span className={`text-[10px] font-mono font-bold ${isOpen ? 'text-emerald-400' : 'text-slate-600'}`}>
-                              [0{i + 1}]
-                            </span>
-                            <div className="flex-1">
-                              <div className="flex justify-between items-center relative z-10">
-                                <span className={`font-bold text-xs leading-tight pr-4 ${isOpen ? 'text-emerald-400' : 'text-white'}`}>
-                                  {faq.q}
-                                </span>
-                                <span className={`text-xs ${isOpen ? 'text-emerald-400' : 'text-slate-500'}`}>
-                                  {isOpen ? '▲' : '▼'}
-                                </span>
-                              </div>
-                              
-                              <AnimatePresence>
-                                {isOpen && (
-                                  <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: "auto" }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    className="text-xs text-slate-300 mt-2 leading-relaxed border-t border-slate-800 pt-2"
-                                  >
-                                    {faq.a}
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
+                      <div key={i} onClick={() => setActiveIndex(isOpen ? null : i)} className={`group relative overflow-hidden cursor-pointer rounded-xl p-[1px] transition-all duration-300 border ${
+                        isOpen ? (isDark ? 'border-blue-500 bg-blue-500/20' : 'border-blue-600 bg-blue-50') : (isDark ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-slate-50')
+                      }`}>
+                        <div className={`rounded-[11px] p-3.5 relative overflow-hidden flex items-center gap-3 ${isDark ? 'bg-[#030406]/95' : 'bg-white'}`}>
+                          <span className={`text-[10px] font-mono font-bold ${isOpen ? (isDark ? 'text-blue-400' : 'text-blue-600') : 'text-slate-400'}`}>[0{i + 1}]</span>
+                          <div className="flex-1">
+                            <div className="flex justify-between items-center relative z-10">
+                              <span className={`font-bold text-xs leading-tight pr-4 ${isOpen ? (isDark ? 'text-blue-400' : 'text-blue-600') : ''}`}>{faq.q}</span>
+                              <span className="text-xs">{isOpen ? '▲' : '▼'}</span>
                             </div>
+                            <AnimatePresence>
+                              {isOpen && (
+                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className={`text-xs mt-2 leading-relaxed border-t pt-2 ${isDark ? 'text-slate-300 border-slate-800' : 'text-slate-600 border-slate-100'}`}>
+                                  {faq.a}
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </div>
                         </div>
-                      </motion.div>
+                      </div>
                     );
                   })}
                 </motion.div>
@@ -365,24 +229,23 @@ export default function TopSection({ onSelectMenu }: TopSectionProps) {
           )}
         </AnimatePresence>
 
-        {/* Footer Bawah Hero */}
-        <div className="w-full pt-6 mt-10 border-t border-slate-800/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs text-slate-500">
-          <span className="uppercase tracking-wider">APACHE-GRADE PROTOCOL // MUDAPEDIA 2026</span>
-          <div className="flex items-center gap-6">
-            <span className="text-slate-400">STATUS: ALL SYSTEMS NORMAL</span>
-            <span className="text-emerald-400 font-bold">GLOBAL NETWORK CONNECTED</span>
-          </div>
+        <div className={`w-full pt-6 mt-10 border-t flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs ${isDark ? 'border-slate-800/80 text-slate-500' : 'border-slate-200 text-slate-500'}`}>
+          <span className="uppercase tracking-wider">OFFICIAL CORP PROFILE MUDAPEDIA 2026</span>
+          <div className="flex items-center gap-6" />
         </div>
 
       </section>
 
-      {/* --- INFINITE MARQUEE PARTNER --- */}
-      <div className="w-full bg-[#05070a] border-y border-slate-900 py-4 overflow-hidden relative z-25 group whitespace-nowrap flex">
+      <div className={`w-full border-y py-4 overflow-hidden relative z-25 group whitespace-nowrap flex ${isDark ? 'bg-[#030406] border-slate-900' : 'bg-slate-50 border-slate-200'}`}>
         <div className="inline-flex w-max animate-marquee group-hover:[animation-play-state:paused] flex-nowrap items-center">
-          {[...partners, ...partners, ...partners, ...partners, ...partners, ...partners].map((partner, idx) => (
-            <div key={idx} className="inline-flex items-center mx-8 text-xs font-mono tracking-widest text-slate-300 uppercase shrink-0">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-3 inline-block" />
-              <span>{partner}</span>
+          {[...partners, ...partners, ...partners, ...partners].map((partner, idx) => (
+            <div key={idx} className="inline-flex items-center mx-10 text-xs font-mono shrink-0">
+              <div className={`w-7 h-7 mr-3 shrink-0 flex items-center justify-center rounded-full border overflow-hidden ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}>
+                <img src={partner.img} alt={partner.name} className="w-full h-full object-contain" />
+              </div>
+              <span className={`font-semibold tracking-wide text-sm ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                {partner.name}
+              </span>
             </div>
           ))}
         </div>

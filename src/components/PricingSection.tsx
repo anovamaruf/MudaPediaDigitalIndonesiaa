@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/context/ThemeContext';
 
 const packageTabs = ['SOLANA', 'SUI', 'ETH', 'BNB', 'TRON'];
 const packageDataMap: Record<string, Array<{ t: string, p: string, f: string[] }>> = {
@@ -33,21 +34,23 @@ const packageDataMap: Record<string, Array<{ t: string, p: string, f: string[] }
 };
 
 export default function PricingSection() {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   const [activePackageTab, setActivePackageTab] = useState('SOLANA');
 
   return (
     <div className="w-full max-w-5xl pointer-events-auto">
-      <span className="text-xs text-emerald-400 tracking-widest uppercase block mb-2">// SECTION 02 - PAKET</span>
       
       <div className="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
         {packageTabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActivePackageTab(tab)}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
               activePackageTab === tab
-                ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]'
-                : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
+                ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
+                : isDark ? 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white' : 'bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900'
             }`}
           >
             {tab}
@@ -65,14 +68,16 @@ export default function PricingSection() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 max-h-[60vh] overflow-y-auto pr-2"
         >
           {packageDataMap[activePackageTab].map((pkt, idx) => (
-            <motion.div key={idx} initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: idx * 0.1, duration: 0.4 }} className="bg-[#0a0c16] border border-slate-800 rounded-2xl p-6 flex flex-col items-center text-center">
-              <h3 className="text-lg font-bold text-white mb-1">{pkt.t}</h3>
-              <p className="text-xs text-slate-500 mb-4">Fitur penting untuk membuat token.</p>
-              <h2 className="text-xl sm:text-2xl font-black text-white mb-6">{pkt.p}</h2>
-              <ul className="text-left text-[10px] text-slate-400 space-y-3 mb-8 w-full">
-                {pkt.f.map((fitur, fidx) => <li key={fidx} className="flex items-center gap-2"><span className="text-emerald-400">✓</span> {fitur}</li>)}
+            <motion.div key={idx} initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: idx * 0.1, duration: 0.4 }} className={`border rounded-2xl p-6 flex flex-col items-center text-center shadow-lg ${
+              isDark ? 'bg-[#0a0c16] border-slate-800 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
+            }`}>
+              <h3 className="text-lg font-bold mb-1">{pkt.t}</h3>
+              <p className={`text-xs mb-4 ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>Fitur penting untuk membuat token.</p>
+              <h2 className="text-xl sm:text-2xl font-black mb-6">{pkt.p}</h2>
+              <ul className={`text-left text-[10px] space-y-3 mb-8 w-full ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                {pkt.f.map((fitur, fidx) => <li key={fidx} className="flex items-center gap-2"><span className={isDark ? 'text-blue-400 font-bold' : 'text-blue-600 font-bold'}>✓</span> {fitur}</li>)}
               </ul>
-              <button className="mt-auto w-full py-3 bg-emerald-500 text-black text-xs font-bold rounded-xl hover:bg-emerald-400 transition-colors">Beli Paket</button>
+              <button className="mt-auto w-full py-3 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-500 transition-colors cursor-pointer shadow-md">Beli Paket</button>
             </motion.div>
           ))}
         </motion.div>
