@@ -173,11 +173,11 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
         return;
       }
 
-      if (diff > 35) {
+      if (diff > 25) {
         // Swipe ke atas untuk turun
+        e.preventDefault();
         if (activeMenuRef.current === 1) {
           if (packageTabIdxRef.current < packageTabs.length - 1) {
-            e.preventDefault();
             setPackageTabIdx(prev => prev + 1);
             touchStartY.current = touchEndY;
             return;
@@ -190,15 +190,14 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
         }
 
         if (activeMenuRef.current < menuList.length - 1) {
-          e.preventDefault();
           changeMenu(activeMenuRef.current + 1);
           touchStartY.current = touchEndY;
         }
-      } else if (diff < -35) {
+      } else if (diff < -25) {
         // Swipe ke bawah untuk naik
+        e.preventDefault();
         if (activeMenuRef.current === 1) {
           if (packageTabIdxRef.current > 0) {
-            e.preventDefault();
             setPackageTabIdx(prev => prev - 1);
             touchStartY.current = touchEndY;
             return;
@@ -210,7 +209,6 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
         }
 
         if (activeMenuRef.current > 0) {
-          e.preventDefault();
           changeMenu(activeMenuRef.current - 1);
           if (activeMenuRef.current - 1 === 1) {
             setPackageTabIdx(packageTabs.length - 1);
@@ -251,13 +249,13 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
     <section 
       ref={sectionRef}
       id="pricing-section" 
-      className={`relative w-full min-h-screen lg:h-screen overflow-hidden font-mono select-none border-b flex flex-col justify-center pt-20 lg:pt-0 transition-colors duration-300 ${
+      className={`relative w-full h-[100dvh] overflow-hidden font-mono select-none border-b flex flex-col justify-center pt-16 lg:pt-0 transition-colors duration-300 ${
         isDark ? 'bg-[#030406] border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-900'
       }`}
     >
       
       {/* MOBILE NAVIGATION TABS */}
-      <div className="sm:hidden absolute top-4 left-0 w-full px-4 z-40 pointer-events-auto">
+      <div className="sm:hidden absolute top-3 left-0 w-full px-4 z-40 pointer-events-auto">
         <div className={`backdrop-blur-md border rounded-2xl p-2 flex items-center justify-between shadow-2xl ${
           isDark ? 'bg-slate-900/95 border-slate-800' : 'bg-white/95 border-slate-200'
         }`}>
@@ -265,7 +263,7 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
             <button
               key={i}
               onClick={() => { changeMenu(i); if (i === 1) setPackageTabIdx(0); }}
-              className={`flex-1 py-2.5 mx-0.5 text-[10px] font-bold rounded-xl transition-all cursor-pointer ${
+              className={`flex-1 py-2 mx-0.5 text-[9px] font-bold rounded-xl transition-all cursor-pointer ${
                 activeMenu === i 
                   ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]' 
                   : isDark ? 'text-slate-400 hover:text-white bg-slate-800/40' : 'text-slate-600 hover:text-slate-900 bg-slate-100'
@@ -275,17 +273,17 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
             </button>
           ))}
         </div>
-        <div className="text-center mt-2">
+        <div className="text-center mt-1.5">
           <span className="text-[9px] text-blue-400 tracking-widest uppercase font-bold animate-pulse">
-            🔒 SECTION PINNED ({activeMenu + 1}/4) {activeMenu === 1 ? `— Tab: ${packageTabs[packageTabIdx]}` : ''}
+            🔒 PINNED ({activeMenu + 1}/4) {activeMenu === 1 ? `— Network: ${packageTabs[packageTabIdx]}` : ''}
           </span>
         </div>
       </div>
 
-      {/* KONTEN TENGAH DENGAN BOUNDARY SCROLL CONTAINER */}
+      {/* KONTEN TENGAH */}
       <div 
         ref={contentContainerRef}
-        className="relative z-10 w-full max-h-[75vh] lg:max-h-none overflow-y-auto sm:overflow-y-visible flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto pb-12 lg:pb-12"
+        className="relative z-10 w-full flex items-center justify-start pl-4 sm:pl-24 lg:pl-32 p-4 sm:p-12 pointer-events-none my-auto"
       >
         <AnimatePresence mode="wait">
           {activeMenu === 0 && <AboutSection />}
@@ -338,8 +336,8 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
                   
                   <button onClick={(e) => { e.stopPropagation(); changeMenu(i); if (i === 1) setPackageTabIdx(0); }} className={`rounded-full transition-all duration-300 cursor-pointer ${
                     isActive ? (isDark ? 'w-4 h-4 bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.9)]' : 'w-4 h-4 bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.5)]') : (isDark ? 'w-2.5 h-2.5 bg-slate-700 hover:bg-slate-400' : 'w-2.5 h-2.5 bg-slate-300 hover:bg-slate-500')
-                  }`} />
-                
+                }`} />
+              
               </div>
             </div>
           );
@@ -348,4 +346,4 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
       </div>
     </section>
   );
-} 
+}
