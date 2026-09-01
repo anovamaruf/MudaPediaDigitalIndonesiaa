@@ -52,27 +52,36 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
     }, 500);
   };
 
-  // --- SMOOTH SCROLL-LOCKING & SUB-STEP PACKET TABS CHECKING ---
+  // --- SMOOTH SCROLL-LOCKING & SMART SCROLLABLE CONTAINER CHECK ---
   useEffect(() => {
     const sectionEl = sectionRef.current;
     if (!sectionEl) return;
 
+    // Helper untuk mengecek apakah target sedang men-scroll elemen internal (seperti list paket)
+    const checkIsScrollingInternal = (target: HTMLElement, delta: number) => {
+      const scrollableEl = target.closest('.overflow-y-auto') as HTMLElement;
+      if (!scrollableEl) return false;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollableEl;
+      const isScrollable = scrollHeight > clientHeight;
+
+      if (!isScrollable) return false;
+
+      // Jika mencoba scroll ke bawah dan belum mentok bawah
+      if (delta > 0 && scrollTop + clientHeight < scrollHeight - 2) {
+        return true;
+      }
+      // Jika mencoba scroll ke atas dan belum mentok atas
+      if (delta < 0 && scrollTop > 2) {
+        return true;
+      }
+      return false;
+    };
+
     const handleWheel = (e: WheelEvent) => {
-      const container = contentContainerRef.current;
-
-      // Cek apakah konten di dalam card (misal: Tim / Galeri) bisa di-scroll secara vertikal
-      if (container) {
-        const { scrollTop, scrollHeight, clientHeight } = container;
-        const isScrollable = scrollHeight > clientHeight;
-
-        if (isScrollable) {
-          if (e.deltaY > 0 && scrollTop + clientHeight < scrollHeight - 2) {
-            return;
-          }
-          if (e.deltaY < 0 && scrollTop > 2) {
-            return;
-          }
-        }
+      const target = e.target as HTMLElement;
+      if (checkIsScrollingInternal(target, e.deltaY)) {
+        return; // Biarkan card melakukan scroll internal
       }
 
       // Jika sedang animasi transisi, abaikan dulu agar tidak menumpuk
@@ -152,20 +161,11 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
     const handleTouchMove = (e: TouchEvent) => {
       const touchEndY = e.touches[0].clientY;
       const diff = touchStartY.current - touchEndY;
-      const container = contentContainerRef.current;
+      const target = e.target as HTMLElement;
 
-      if (container) {
-        const { scrollTop, scrollHeight, clientHeight } = container;
-        const isScrollable = scrollHeight > clientHeight;
-
-        if (isScrollable) {
-          if (diff > 0 && scrollTop + clientHeight < scrollHeight - 2) {
-            return;
-          }
-          if (diff < 0 && scrollTop > 2) {
-            return;
-          }
-        }
+      // Jika sedang men-scroll elemen di dalam kartu paket/tim, biarkan berjalan
+      if (checkIsScrollingInternal(target, diff)) {
+        return;
       }
 
       if (isAnimating.current) {
@@ -336,11 +336,11 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
                   
                   <button onClick={(e) => { e.stopPropagation(); changeMenu(i); if (i === 1) setPackageTabIdx(0); }} className={`rounded-full transition-all duration-300 cursor-pointer ${
                     isActive ? (isDark ? 'w-4 h-4 bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.9)]' : 'w-4 h-4 bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.5)]') : (isDark ? 'w-2.5 h-2.5 bg-slate-700 hover:bg-slate-400' : 'w-2.5 h-2.5 bg-slate-300 hover:bg-slate-500')
-                }`} />
-              
+                  }`} />
+                
+                </div>
               </div>
-            </div>
-          );
+            );
           })}
         </div>
       </div>
