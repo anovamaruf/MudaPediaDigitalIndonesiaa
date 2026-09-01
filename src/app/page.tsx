@@ -13,6 +13,7 @@ import FooterSection from '@/components/FooterSection';
 import Web3AIAssistant from '@/components/Web3AIAssistant';
 import WhyChooseSection from '@/components/WhyChooseSection';
 import { useTheme } from '@/context/ThemeContext';
+import TestimonialsSection from '@/components/TestimonialsSection';
 
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -155,10 +156,10 @@ export default function Home() {
               <div className="flex justify-end w-full">
                 <CryptoClimbGame />
               </div>
-
+                  <TestimonialsSection />
             </div>
           </FantasySectionWrapper>
-
+              
           <FooterSection />
           <Web3AIAssistant />
         </div>

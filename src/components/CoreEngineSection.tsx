@@ -9,6 +9,7 @@ import GallerySection from '@/components/GallerySection';
 import { useTheme } from '@/context/ThemeContext';
 
 const menuList = ["Tentang Kami", "Paket", "Tim Kami", "Galeri"];
+const packageTabs = ['SOLANA', 'SUI', 'ETH', 'BNB', 'TRON'];
 const ANGLE_STEP = 35;
 const RADIUS = 380;
 
@@ -25,11 +26,18 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
   const activeMenu = externalActiveMenu !== undefined ? externalActiveMenu : internalMenu;
   const setActiveMenu = externalSetActiveMenu || setInternalMenu;
 
+  // State untuk sub-langkah tab di dalam bagian Paket (Solana -> Sui -> Eth -> BNB -> Tron)
+  const [packageTabIdx, setPackageTabIdx] = useState(0);
+
   const activeMenuRef = useRef(activeMenu);
   activeMenuRef.current = activeMenu;
 
+  const packageTabIdxRef = useRef(packageTabIdx);
+  packageTabIdxRef.current = packageTabIdx;
+
   const isAnimating = useRef(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const contentContainerRef = useRef<HTMLDivElement>(null);
   
   const touchStartY = useRef<number>(0);
   const scrollAccumulator = useRef<number>(0);
@@ -44,14 +52,29 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
     }, 500);
   };
 
-  // --- SMOOTH SCROLL-LOCKING & ACCUMULATOR (UX PREMIUM) ---
+  // --- SMOOTH SCROLL-LOCKING & SUB-STEP PACKET TABS CHECKING ---
   useEffect(() => {
     const sectionEl = sectionRef.current;
     if (!sectionEl) return;
 
     const handleWheel = (e: WheelEvent) => {
-      const now = Date.now();
-      
+      const container = contentContainerRef.current;
+
+      // Cek apakah konten di dalam card (misal: Tim / Galeri) bisa di-scroll secara vertikal
+      if (container) {
+        const { scrollTop, scrollHeight, clientHeight } = container;
+        const isScrollable = scrollHeight > clientHeight;
+
+        if (isScrollable) {
+          if (e.deltaY > 0 && scrollTop + clientHeight < scrollHeight - 2) {
+            return;
+          }
+          if (e.deltaY < 0 && scrollTop > 2) {
+            return;
+          }
+        }
+      }
+
       // Jika sedang animasi transisi, abaikan dulu agar tidak menumpuk
       if (isAnimating.current) {
         e.preventDefault();
@@ -66,23 +89,52 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
 
       if (scrollAccumulator.current > threshold) {
         // Scroll ke bawah
+        scrollAccumulator.current = 0;
+
+        if (activeMenuRef.current === 1) {
+          // Jika sedang di Paket, sikluskan dulu tab jaringan (Solana -> Sui -> Eth -> BNB -> Tron) sampai habis
+          if (packageTabIdxRef.current < packageTabs.length - 1) {
+            e.preventDefault();
+            setPackageTabIdx(prev => prev + 1);
+            return;
+          } else {
+            // Jika tab paket sudah habis (di Tron), baru izinkan lanjut ke Tim Kami
+            changeMenu(2);
+            setPackageTabIdx(0);
+            return;
+          }
+        }
+
         if (activeMenuRef.current < menuList.length - 1) {
           e.preventDefault();
-          scrollAccumulator.current = 0;
           changeMenu(activeMenuRef.current + 1);
         } else {
           // Jika sudah di slide terakhir (Galeri), biarkan halaman lepas ke bawah (Track Record/Footer)
-          scrollAccumulator.current = 0;
         }
       } else if (scrollAccumulator.current < -threshold) {
         // Scroll ke atas
+        scrollAccumulator.current = 0;
+
+        if (activeMenuRef.current === 1) {
+          // Jika di Paket, mundur tab dulu sebelum naik ke Tentang Kami
+          if (packageTabIdxRef.current > 0) {
+            e.preventDefault();
+            setPackageTabIdx(prev => prev - 1);
+            return;
+          } else {
+            changeMenu(0);
+            return;
+          }
+        }
+
         if (activeMenuRef.current > 0) {
           e.preventDefault();
-          scrollAccumulator.current = 0;
           changeMenu(activeMenuRef.current - 1);
+          if (activeMenuRef.current - 1 === 1) {
+            setPackageTabIdx(packageTabs.length - 1);
+          }
         } else {
           // Jika sudah di slide pertama (Tentang Kami), biarkan halaman lepas ke atas
-          scrollAccumulator.current = 0;
         }
       } else {
         // Jika belum melewati threshold tapi berada di dalam core engine, kunci sementara agar tidak bocor ke bawah
@@ -100,6 +152,21 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
     const handleTouchMove = (e: TouchEvent) => {
       const touchEndY = e.touches[0].clientY;
       const diff = touchStartY.current - touchEndY;
+      const container = contentContainerRef.current;
+
+      if (container) {
+        const { scrollTop, scrollHeight, clientHeight } = container;
+        const isScrollable = scrollHeight > clientHeight;
+
+        if (isScrollable) {
+          if (diff > 0 && scrollTop + clientHeight < scrollHeight - 2) {
+            return;
+          }
+          if (diff < 0 && scrollTop > 2) {
+            return;
+          }
+        }
+      }
 
       if (isAnimating.current) {
         e.preventDefault();
@@ -107,17 +174,47 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
       }
 
       if (diff > 35) {
-        // Swipe ke atas (gerakan jari ke atas untuk melihat konten berikutnya)
+        // Swipe ke atas untuk turun
+        if (activeMenuRef.current === 1) {
+          if (packageTabIdxRef.current < packageTabs.length - 1) {
+            e.preventDefault();
+            setPackageTabIdx(prev => prev + 1);
+            touchStartY.current = touchEndY;
+            return;
+          } else {
+            changeMenu(2);
+            setPackageTabIdx(0);
+            touchStartY.current = touchEndY;
+            return;
+          }
+        }
+
         if (activeMenuRef.current < menuList.length - 1) {
           e.preventDefault();
           changeMenu(activeMenuRef.current + 1);
           touchStartY.current = touchEndY;
         }
       } else if (diff < -35) {
-        // Swipe ke bawah (gerakan jari ke bawah untuk kembali ke slide sebelumnya)
+        // Swipe ke bawah untuk naik
+        if (activeMenuRef.current === 1) {
+          if (packageTabIdxRef.current > 0) {
+            e.preventDefault();
+            setPackageTabIdx(prev => prev - 1);
+            touchStartY.current = touchEndY;
+            return;
+          } else {
+            changeMenu(0);
+            touchStartY.current = touchEndY;
+            return;
+          }
+        }
+
         if (activeMenuRef.current > 0) {
           e.preventDefault();
           changeMenu(activeMenuRef.current - 1);
+          if (activeMenuRef.current - 1 === 1) {
+            setPackageTabIdx(packageTabs.length - 1);
+          }
           touchStartY.current = touchEndY;
         }
       }
@@ -167,7 +264,7 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
           {menuList.map((menu, i) => (
             <button
               key={i}
-              onClick={() => changeMenu(i)}
+              onClick={() => { changeMenu(i); if (i === 1) setPackageTabIdx(0); }}
               className={`flex-1 py-2.5 mx-0.5 text-[10px] font-bold rounded-xl transition-all cursor-pointer ${
                 activeMenu === i 
                   ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]' 
@@ -180,18 +277,27 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
         </div>
         <div className="text-center mt-2">
           <span className="text-[9px] text-blue-400 tracking-widest uppercase font-bold animate-pulse">
-            🔒 SECTION PINNED ({activeMenu + 1}/4) — Scroll untuk navigasi
+            🔒 SECTION PINNED ({activeMenu + 1}/4) {activeMenu === 1 ? `— Tab: ${packageTabs[packageTabIdx]}` : ''}
           </span>
         </div>
       </div>
 
-      {/* KONTEN TENGAH */}
-      <div className="relative z-10 w-full flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto pb-12 lg:pb-12">
+      {/* KONTEN TENGAH DENGAN BOUNDARY SCROLL CONTAINER */}
+      <div 
+        ref={contentContainerRef}
+        className="relative z-10 w-full max-h-[75vh] lg:max-h-none overflow-y-auto sm:overflow-y-visible flex items-center justify-start pl-6 sm:pl-24 lg:pl-32 p-6 sm:p-12 pointer-events-none my-auto pb-12 lg:pb-12"
+      >
         <AnimatePresence mode="wait">
           {activeMenu === 0 && <AboutSection />}
           {activeMenu === 1 && (
             <motion.div key={1} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)' }} transition={{ duration: 0.6 }} className="w-full max-w-5xl pointer-events-auto">
-              <PricingSection />
+              <PricingSection 
+                activeTab={packageTabs[packageTabIdx]} 
+                onTabChange={(tab) => {
+                  const idx = packageTabs.indexOf(tab);
+                  if (idx !== -1) setPackageTabIdx(idx);
+                }} 
+              />
             </motion.div>
           )}
           {activeMenu === 2 && (
@@ -224,22 +330,22 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
               <div key={i} className="absolute top-1/2 left-1/2 flex items-center" style={{ transform: `translate(-50%, -50%) rotate(${rotation}deg) translateX(-${RADIUS}px)` }}>
                 <div className="flex items-center gap-4 transition-all duration-700" style={{ transform: `rotate(${-rotation + activeMenu * ANGLE_STEP}deg)` }}>
                   
-                  <span onClick={(e) => { e.stopPropagation(); changeMenu(i); }} className={`uppercase tracking-widest text-xs font-bold cursor-pointer transition-all duration-300 ${
+                  <span onClick={(e) => { e.stopPropagation(); changeMenu(i); if (i === 1) setPackageTabIdx(0); }} className={`uppercase tracking-widest text-xs font-bold cursor-pointer transition-all duration-300 ${
                     isActive ? (isDark ? 'text-blue-400 opacity-150 scale-105' : 'text-blue-600 opacity-150 scale-105 font-extrabold') : (isDark ? 'text-slate-500 opacity-30 hover:opacity-80' : 'text-slate-400 opacity-50 hover:opacity-90')
                   }`}>
                     {menu}
                   </span>
                   
-                  <button onClick={(e) => { e.stopPropagation(); changeMenu(i); }} className={`rounded-full transition-all duration-300 cursor-pointer ${
+                  <button onClick={(e) => { e.stopPropagation(); changeMenu(i); if (i === 1) setPackageTabIdx(0); }} className={`rounded-full transition-all duration-300 cursor-pointer ${
                     isActive ? (isDark ? 'w-4 h-4 bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.9)]' : 'w-4 h-4 bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.5)]') : (isDark ? 'w-2.5 h-2.5 bg-slate-700 hover:bg-slate-400' : 'w-2.5 h-2.5 bg-slate-300 hover:bg-slate-500')
                   }`} />
                 
-                </div>
               </div>
-            );
+            </div>
+          );
           })}
         </div>
       </div>
     </section>
   );
-}
+} 
