@@ -34,25 +34,12 @@ export default function CryptoGlossary() {
   });
 
   return (
-    <section className={`w-full py-10 sm:py-20 px-4 sm:px-8 lg:px-24 border-b relative transition-colors ${
-      isDark ? 'bg-[#030406] border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-900'
+    <section className={`w-full py-6 px-0 relative transition-colors ${
+      isDark ? 'bg-transparent text-white' : 'bg-transparent text-slate-900'
     }`}>
-      <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+      <div className="max-w-4xl mx-auto space-y-6">
         
-        <div className="text-left space-y-2">
-          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-mono border ${
-            isDark ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : 'bg-blue-100 border-blue-200 text-blue-700 font-bold'
-          }`}>
-            KAMUS SANTAI
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
-            Kamus Istilah Kripto & Web3
-          </h2>
-          <p className={`text-xs sm:text-sm font-mono leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            Gak usah bingung sama istilah gaul teknologi, cari artinya di sini dengan bahasa yang gampang dimengerti.
-          </p>
-        </div>
-
+        {/* Search Bar & Categories */}
         <div className="space-y-3">
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm">🔍</span>
@@ -84,6 +71,7 @@ export default function CryptoGlossary() {
           </div>
         </div>
 
+        {/* Glossary Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <AnimatePresence mode="popLayout">
             {filteredData.length > 0 ? (
@@ -121,6 +109,7 @@ export default function CryptoGlossary() {
 
       </div>
 
+      {/* Modal Detail */}
       <AnimatePresence>
         {selectedItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
