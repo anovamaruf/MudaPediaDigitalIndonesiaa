@@ -93,29 +93,36 @@ export default function TopSection({ onSelectMenu }: TopSectionProps) {
     return () => ctx.revert();
   }, []);
 
-  const handleNavClick = (targetMenuName: string, menuIndex: number) => {
-    if (onSelectMenu) {
-      onSelectMenu(menuIndex);
-    }
-    const pricingSection = document.getElementById('pricing-section');
-    if (pricingSection) {
-      pricingSection.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(() => {
-        const buttons = document.querySelectorAll('button, span');
-        buttons.forEach((el) => {
-          if (el.textContent?.trim() === targetMenuName) {
-            (el as HTMLElement).click();
-          }
-        });
-      }, 300);
+  const handleNavClick = (targetType: 'about' | 'core', menuIndex: number, targetMenuName?: string) => {
+    if (targetType === 'about') {
+      const aboutSection = document.getElementById('about-section');
+      if (aboutSection) {
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      if (onSelectMenu) {
+        onSelectMenu(menuIndex);
+      }
+      const pricingSection = document.getElementById('pricing-section');
+      if (pricingSection) {
+        pricingSection.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          const buttons = document.querySelectorAll('button, span');
+          buttons.forEach((el) => {
+            if (el.textContent?.trim() === targetMenuName) {
+              (el as HTMLElement).click();
+            }
+          });
+        }, 300);
+      }
     }
   };
 
   const navLinks = [
-    { label: "TENTANG KAMI", action: () => handleNavClick("Tentang Kami", 0) },
-    { label: "PAKET", action: () => handleNavClick("Paket", 1) },
-    { label: "TIM KAMI", action: () => handleNavClick("Tim Kami", 2) },
-    { label: "GALERI", action: () => handleNavClick("Galeri", 3) },
+    { label: "TENTANG KAMI", action: () => handleNavClick('about', 0) },
+    { label: "PAKET", action: () => handleNavClick('core', 0, "Paket") },
+    { label: "TIM KAMI", action: () => handleNavClick('core', 1, "Tim Kami") },
+    { label: "GALERI", action: () => handleNavClick('core', 2, "Galeri") },
     { label: "KONTAK", action: () => {
       const footer = document.querySelector('footer');
       if (footer) footer.scrollIntoView({ behavior: 'smooth' });
@@ -253,7 +260,7 @@ export default function TopSection({ onSelectMenu }: TopSectionProps) {
             <motion.div initial={{ opacity: 0, height: 0, y: -10 }} animate={{ opacity: 1, height: "auto", y: 0 }} exit={{ opacity: 0, height: 0, y: -10 }} transition={{ duration: 0.4, ease: "easeInOut" }} className="w-full max-w-3xl mt-6 overflow-hidden">
               <div className={`p-5 rounded-2xl backdrop-blur-md shadow-2xl border ${isDark ? 'bg-[#0a0c16]/95 border-blue-500/40 text-white' : 'bg-white/95 border-blue-200 text-slate-900 shadow-slate-200'}`}>
                 <h3 className={`text-xs font-mono uppercase tracking-widest mb-3 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                  // DIREKTORI FAQ // INFORMASI INSTAN:
+                  INFORMASI INSTAN:
                 </h3>
                 
                 <motion.div className="space-y-2.5" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }} initial="hidden" animate="visible">

@@ -71,23 +71,24 @@ export default function Home() {
               HALAMAN 1: LANDING HERO + TRACK RECORD
              ========================================================= */}
           <motion.section 
-            initial={{ opacity: 0, scale: 0.95, filter: 'blur(12px)' }}
+            initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
             whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="relative w-full min-h-screen flex flex-col justify-between pt-20 pb-10"
           >
             <TopSection />
           </motion.section>
 
           {/* =========================================================
-              HALAMAN 2: TENTANG KAMI & WHY CHOOSE US
+              HALAMAN 2: TENTANG KAMI & WHY CHOOSE US (DITAMBAHKAN ID ABOUT-SECTION)
              ========================================================= */}
           <motion.section 
-            initial={{ opacity: 0, scale: 0.95, filter: 'blur(12px)' }}
+            id="about-section"
+            initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
             whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className={`w-full py-16 px-6 sm:px-12 border-b ${isDark ? 'border-slate-900' : 'border-slate-200'}`}
           >
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
@@ -104,10 +105,10 @@ export default function Home() {
               HALAMAN 3: CORE ENGINE (PAKET, TIM, GALERI)
              ========================================================= */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95, filter: 'blur(12px)' }}
+            initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
             whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="w-full"
           >
             <CoreEngineSection activeMenu={selectedCoreTab} setActiveMenu={setSelectedCoreTab} />
@@ -117,10 +118,10 @@ export default function Home() {
               HALAMAN 4: KAMUS SANTAI BLOCKCHAIN
              ========================================================= */}
           <motion.section 
-            initial={{ opacity: 0, scale: 0.95, filter: 'blur(12px)' }}
+            initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
             whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className={`w-full py-20 px-6 sm:px-12 border-b ${isDark ? 'border-slate-900' : 'border-slate-200'}`}
           >
             <div className="max-w-5xl mx-auto text-center">
@@ -146,14 +147,14 @@ export default function Home() {
               HALAMAN 5: TESTIMONI MITRA & GAME
              ========================================================= */}
           <motion.section 
-            initial={{ opacity: 0, scale: 0.95, filter: 'blur(12px)' }}
+            initial={{ opacity: 0, scale: 0.98, filter: 'blur(4px)' }}
             whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="w-full py-16 px-6 sm:px-12 max-w-7xl mx-auto"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-              {/* Kolom Kiri: Testimoni Mitra */}
+              {/* Kolom Kiri: Testimoni & Ulasan Mandiri */}
               <div className="lg:col-span-7 flex flex-col justify-center">
                 <TestimonialsSection />
               </div>

@@ -292,7 +292,11 @@ export default function CoreEngineSection({ activeMenu: externalActiveMenu, setA
               <TeamSection />
             </motion.div>
           )}
-          {activeMenu === 2 && <GallerySection />}
+          {activeMenu === 2 && (
+            <motion.div key={2} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.2, filter: 'blur(8px)' }} transition={{ duration: 0.6 }} className="w-full max-w-5xl pointer-events-auto">
+              <GallerySection />
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
