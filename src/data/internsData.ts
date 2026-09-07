@@ -1,142 +1,46 @@
-export interface Socials {
-  linkedin?: string;
-  github?: string;
-  instagram?: string;
-}
-
-export interface Intern {
-  id: string;
+export interface Member {
   name: string;
+  title: string;
   role: string;
-  batch: number;
-  year: number;
-  isActive: boolean;
-  isAlumni?: boolean;
-  activityScore: number;
+  contribution: string;
+  projects: string[];
+  linkedin: string;
+  instagram: string;
   avatar: string;
-  bio: string;
-  socials: Socials;
-  contributions: string[];
 }
 
-export const internsData: Intern[] = [
-  {
-    id: "muda-001",
-    name: "nopa",
-    role: "Backend Developer",
-    batch: 3,
-    year: 2026,
-    isActive: true,
-    activityScore: 98,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg",
-    bio: "Pengembang sistem backend, arsitektur database desentralisasi, dan optimasi API.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Pengembangan API Redesain Mudapedia", "Arsitektur Database Serverless"]
-  },
-  {
-    id: "muda-002",
-    name: "fynoo",
-    role: "Frontend Developer",
-    batch: 3,
-    year: 2026,
-    isActive: true,
-    activityScore: 95,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_rinjanii_dqu9ez.jpg",
-    bio: "Fokus pada pembuatan antarmuka Next.js, animasi UI interaktif, dan integrasi aset 3D.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Integrasi Three.js 3D Canvas", "Sistem Filter Tim & Modal Portofolio"]
-  },
-  {
-    id: "muda-003",
-    name: "anova",
-    role: "Internship",
-    batch: 3,
-    year: 2026,
-    isActive: true,
-    activityScore: 89,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785311500/nopa_skena_kalcer_espia7.jpg",
-    bio: "Talenta muda yang berfokus pada riset ekosistem Web3 dan pembuatan aset media.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Riset Konten Edukasi Crypto", "Dukungan Manajemen Media Sosial"]
-  },
-  {
-    id: "muda-004",
-    name: "nop",
-    role: "Internship",
-    batch: 2,
-    year: 2025,
-    isActive: true,
-    activityScore: 89,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785311497/nopa_duduk_dxobqa.jpg",
-    bio: "Talenta muda yang berfokus pada riset ekosistem Web3 dan pembuatan aset media.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Riset Konten Edukasi Crypto", "Dukungan Manajemen Media Sosial"]
-  },
-  {
-    id: "muda-005",
-    name: "mira",
-    role: "Internship",
-    batch: 2,
-    year: 2025,
-    isActive: false,
-    isAlumni: true,
-    activityScore: 89,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg",
-    bio: "Talenta muda yang berfokus pada riset ekosistem Web3 dan pembuatan aset media.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Riset Konten Edukasi Crypto", "Dukungan Manajemen Media Sosial"]
-  },
-  {
-    id: "muda-006",
-    name: "namira",
-    role: "Internship",
-    batch: 2,
-    year: 2025,
-    isActive: false,
-    isAlumni: true,
-    activityScore: 89,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785313316/miwa_lcu6te.jpg",
-    bio: "Talenta muda yang berfokus pada riset ekosistem Web3 dan pembuatan aset media.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Riset Konten Edukasi Crypto", "Dukungan Manajemen Media Sosial"]
-  },
-  {
-    id: "muda-007",
-    name: "kai",
-    role: "Internship",
-    batch: 3,
-    year: 2026,
-    isActive: true,
-    activityScore: 89,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785313317/kai_yvh9gd.jpg",
-    bio: "Talenta muda yang berfokus pada riset ekosistem Web3 dan pembuatan aset media.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Riset Konten Edukasi Crypto", "Dukungan Manajemen Media Sosial"]
-  },
-  {
-    id: "muda-008",
-    name: "prabu",
-    role: "Internship",
-    batch: 3,
-    year: 2026,
-    isActive: true,
-    activityScore: 89,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785313317/prabu_js1g1i.jpg",
-    bio: "Talenta muda yang berfokus pada riset ekosistem Web3 dan pembuatan aset media.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Riset Konten Edukasi Crypto", "Dukungan Manajemen Media Sosial"]
-  },
-  {
-    id: "muda-009",
-    name: "rija",
-    role: "Internship",
-    batch: 3,
-    year: 2026,
-    isActive: true,
-    activityScore: 89,
-    avatar: "https://res.cloudinary.com/drtw0hnds/image/upload/v1785313319/rija_fxm5kq.jpg",
-    bio: "Talenta muda yang berfokus pada riset ekosistem Web3 dan pembuatan aset media.",
-    socials: { linkedin: "https://linkedin.com", instagram: "https://instagram.com" },
-    contributions: ["Riset Konten Edukasi Crypto", "Dukungan Manajemen Media Sosial"]
-  }
+export const mainTeam: Member[] = [
+  { name: 'mira', title: 'Frontend Developer', role: 'Web3 Developer', contribution: 'Mengembangkan antarmuka dApps berbasis Next.js dan Framer Motion dengan performa tinggi.', projects: ['Mudapedia Landing Page v2', 'Web3 Token Swap UI'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg' },
+  { name: 'nopa', title: 'Backend Developer', role: 'Web3 Developer', contribution: 'Membangun arsitektur server, integrasi RPC node, dan manajemen database terdistribusi.', projects: ['Smart Contract Indexer', 'API Gateway Web3'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg' },
+  { name: 'miwa', title: 'Smart Contract Engineer', role: 'Web3 Developer', contribution: 'Melakukan audit keamanan kontrak pintar Solidity dan optimasi gas fee.', projects: ['Staking Contract Protocol', 'NFT Marketplace Contract'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785313316/miwa_lcu6te.jpg' },
+  { name: 'namira', title: 'Internship', role: 'Web3 Developer', contribution: 'Membantu riset tokenomics dan pengujian fungsionalitas antarmuka pengguna dApps.', projects: ['Crypto Calculator Tool', 'Glossary Database'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg' }
+];
+
+export const allTeamMembers: Member[] = [
+  ...mainTeam,
+  { name: 'pino', title: 'Backend Developer', role: 'Smart Contract Dev', contribution: 'Optimalisasi kecepatan sinkronisasi data blockchain dan sistem keamanan autentikasi.', projects: ['Node Monitoring Dashboard', 'Secure Auth Service'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg' },
+  { name: 'mir', title: 'Frontend Developer', role: 'UI/UX Web3 Designer', contribution: 'Perancangan sistem komponen UI modular dan pengalaman visual berbasis Web3.', projects: ['Design System Mudapedia', 'Interactive Crypto Game UI'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785313316/miwa_lcu6te.jpg' },
+  { name: 'my mbg gue', title: 'Internship', role: 'Blockchain Security', contribution: 'Membantu dokumentasi teknis kode sumber dan integrasi analitik performa web.', projects: ['Analytics Integration', 'Bug Fixing & Testing'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg' },
+  { name: 'anopa', title: 'Internship', role: 'Community Manager', contribution: 'Mendukung pengelolaan konten edukasi desentralisasi dan riset pasar kripto.', projects: ['Kamus Santai Content Pipeline', 'Community Support Bot'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg' },
+  { name: 'fynoo', title: 'Backend Developer', role: 'Smart Contract Dev', contribution: 'Optimalisasi kecepatan sinkronisasi data blockchain dan sistem keamanan autentikasi.', projects: ['Node Monitoring Dashboard', 'Secure Auth Service'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg' },
+  { name: 'bubub aku', title: 'Frontend Developer', role: 'UI/UX Web3 Designer', contribution: 'Perancangan sistem komponen UI modular dan pengalaman visual berbasis Web3.', projects: ['Design System Mudapedia', 'Interactive Crypto Game UI'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785313316/miwa_lcu6te.jpg' },
+  { name: 'cantik', title: 'Internship', role: 'Blockchain Security', contribution: 'Membantu dokumentasi teknis kode sumber dan integrasi analitik performa web.', projects: ['Analytics Integration', 'Bug Fixing & Testing'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg' },
+  { name: 'maruf', title: 'Internship', role: 'Community Manager', contribution: 'Mendukung pengelolaan konten edukasi desentralisasi dan riset pasar kripto.', projects: ['Kamus Santai Content Pipeline', 'Community Support Bot'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg' }
+];
+
+export const alumniMembers: Member[] = [
+  { name: 'Bayu Segara', title: 'Frontend Developer', role: 'Ex-Lead Developer (2024)', contribution: 'Memimpin pengembangan arsitektur awal frontend platform kolaborasi Web3.', projects: ['V1 Platform Dashboard', 'Awwwards Submission Build'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg' },
+  { name: 'Intan Permata', title: 'Backend Developer', role: 'Ex-Tokenomics Expert (2024)', contribution: 'Membangun fondasi infrastruktur server dan manajemen likuiditas awal.', projects: ['Liquidity Tracker API', 'Core Database Migration'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg' },
+  { name: 'Fajar Nugraha', title: 'Smart Contract Engineer', role: 'Ex-Smart Contract Auditor (2023)', contribution: 'Menyusun standar keamanan token utility dan modul vesting kontrak.', projects: ['Vesting Contract Module', 'Token Standard Implementation'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785313316/miwa_lcu6te.jpg' },
+  { name: 'Siti Rahma', title: 'Internship', role: 'Ex-Community Lead (2023)', contribution: 'Membantu riset tata kelola protokol DAO dan manajemen komunitas.', projects: ['DAO Governance Framework', 'Community Guidelines'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg' }
+];
+
+export const allAlumniMembers: Member[] = [
+  ...alumniMembers,
+  { name: 'Rian Hidayat', title: 'Frontend Developer', role: 'Ex-Frontend Dev (2022)', contribution: 'Pengembangan fitur interaktif grafik harga token real-time.', projects: ['Price Chart Widget', 'Dark Mode Theme Engine'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg' },
+  { name: 'Siska Wulandari', title: 'Internship', role: 'Ex-Marketing (2022)', contribution: 'Pengujian QA komprehensif pada fitur transaksi dan simulasi dompet.', projects: ['QA Test Automation Suite', 'Wallet Connection Module'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785313316/miwa_lcu6te.jpg' },
+  { name: 'joykowie', title: 'Frontend Developer', role: 'Ex-Frontend Dev (2022)', contribution: 'Pengembangan fitur interaktif grafik harga token real-time.', projects: ['Price Chart Widget', 'Dark Mode Theme Engine'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg' },
+  { name: 'magewati', title: 'Internship', role: 'Ex-Marketing (2022)', contribution: 'Pengujian QA komprehensif pada fitur transaksi dan simulasi dompet.', projects: ['QA Test Automation Suite', 'Wallet Connection Module'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311501/nopa_miror_at0oxa.jpg' },
+  { name: 'bro bowo nyawit', title: 'Frontend Developer', role: 'Ex-Frontend Dev (2022)', contribution: 'Pengembangan fitur interaktif grafik harga token real-time.', projects: ['Price Chart Widget', 'Dark Mode Theme Engine'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785313316/miwa_lcu6te.jpg' },
+  { name: 'buna tedy', title: 'Internship', role: 'Ex-Marketing (2022)', contribution: 'Pengujian QA komprehensif pada fitur transaksi dan simulasi dompet.', projects: ['QA Test Automation Suite', 'Wallet Connection Module'], linkedin: 'https://linkedin.com', instagram: 'https://instagram.com', avatar: 'https://res.cloudinary.com/drtw0hnds/image/upload/v1785311496/mira_cantik_dp9zwj.jpg' }
 ];
