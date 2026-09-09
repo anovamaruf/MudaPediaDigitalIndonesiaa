@@ -28,7 +28,7 @@ export default function GallerySection() {
         
         {/* Foto 3 (Pindah ke Atas - Kiri) */}
         <motion.a 
-          href="https://instagram.com" 
+          href="https://www.instagram.com/p/DPoQwQbkvjB/?utm_source=ig_web_button_share_sheet&stkn=MzRlODBiNWFlZA==" 
           target="_blank" 
           rel="noopener noreferrer" 
           onClick={() => sfx.playClick()} 
@@ -53,7 +53,7 @@ export default function GallerySection() {
 
         {/* Foto 4 (Pindah ke Atas - Tengah) */}
         <motion.a 
-          href="https://instagram.com" 
+          href="https://www.instagram.com/p/DQ3TjAVkvbr/?utm_source=ig_web_button_share_sheet&stkn=MzRlODBiNWFlZA==" 
           target="_blank" 
           rel="noopener noreferrer" 
           onClick={() => sfx.playClick()} 
@@ -78,7 +78,7 @@ export default function GallerySection() {
 
         {/* Foto 2 (Tetap di Kanan, Memanjang ke Bawah) */}
         <motion.a 
-          href="https://instagram.com" 
+          href="https://www.instagram.com/p/DPTCPQcEtPW/?utm_source=ig_web_button_share_sheet&stkn=MzRlODBiNWFlZA==" 
           target="_blank" 
           rel="noopener noreferrer" 
           onClick={() => sfx.playClick()} 
@@ -103,7 +103,7 @@ export default function GallerySection() {
 
         {/* Foto 1 (Pindah ke Bawah - Memanjang ke Kiri) */}
         <motion.a 
-          href="https://instagram.com" 
+          href="https://www.instagram.com/p/DOxSoiIEsc-/?utm_source=ig_web_button_share_sheet&stkn=MzRlODBiNWFlZA==" 
           target="_blank" 
           rel="noopener noreferrer" 
           onClick={() => sfx.playClick()} 
